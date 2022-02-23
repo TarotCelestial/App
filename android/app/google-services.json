@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "817995314374",
+    "project_id": "tarotcelestialapp",
+    "storage_bucket": "tarotcelestialapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817995314374:android:2f763db07d3867951d53c7",
+        "android_client_info": {
+          "package_name": "com.tarot_celestial.tarotcelestial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817995314374-otl52g7a6jv5os2i139ac00ig6bvk4qs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tarot_celestial.tarotcelestial",
+            "certificate_hash": "10d5be520ab43f4be291853914fd2f59f4f5fd6f"
+          }
+        },
+        {
+          "client_id": "817995314374-5bimemefk5k3lli4rfbhufa5v7ui3l00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCx_cFWxhsbF9TwgBW8cYpdJhQuFDB0t1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817995314374-5bimemefk5k3lli4rfbhufa5v7ui3l00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
