@@ -6,52 +6,55 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hive/hive.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:tarotcelestial/data/models/hive_models/user_data.dart';
+import 'package:tarotcelestial/data/models/personal_data_model.dart';
 import 'package:tarotcelestial/pages/login/login_page.dart';
-
+import 'package:tarotcelestial/providers/user_provider.dart';
+import 'firebase_options.dart';
 import 'pages/home/home_page.dart';
 import 'pages/login/register_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await dotenv.load(fileName: ".env");
   await Hive.initFlutter();
+  Hive.registerAdapter(UserDataAdapter());
+  await Hive.openBox<UserData>('UserData');
   final prefs = await SharedPreferences.getInstance();
   final isLoged = prefs.getBool('isLoged') ?? false;
   final user = prefs.getString('user') ?? "";
-  final permissions = prefs.getString('permissions') ?? "";
-  final company = prefs.getString('company') ?? "";
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
-  /*runApp(MultiProvider(
-    providers: [/*ChangeNotifierProvider(create: (_) => UserProvider())*/],
-    child: MyApp(isLoged,user),*/
-  runApp(MyApp(isLoged,user));
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
+      child: MyApp(isLoged, user),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   String user;
   bool isLoged;
-  MyApp(this.isLoged,this.user); // This widget is the root of your application
+  MyApp(this.isLoged, this.user); // This widget is the root of your application
   @override
   Widget build(BuildContext context) {
-    String initialRoute;
+    final box = Hive.box<UserData>('UserData');
     Future.delayed(Duration.zero, () async {
-      /*final userProviderReader = context.read<UserProvider>();
-      if(isLoged){
-        userProviderReader.changePermissions(jsonDecode(permissions));
-        userProviderReader.changeCurrentUser(UserModel.fromMap(jsonDecode(user)));
-        userProviderReader.changeCurrentCompany(CompanyModel.fromMap(jsonDecode(company)));
-      }*/
+      final userProviderReader = context.read<UserProvider>();
+      if (isLoged) {
+        try {
+          userProviderReader
+              .setUser(PersonalData.fromJson(box.getAt(0)!.personalData));
+        } catch (_) {}
+      }
     });
     //Gestion de sesión
-    if(isLoged){
-      initialRoute='/control-home-page';
-    }else{
-      initialRoute='/login';
-    }
     return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -59,20 +62,21 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       initialRoute: '/home-page',
-      //initialRoute: '/control-home-page',
       defaultTransition: Transition.leftToRight,
       //registro de rutas de la aplicación, las transitions son animaciones de cambio de pagina
       getPages: [
-        GetPage (name: '/home-page', page: () => const HomePage(),transition: Transition.downToUp),
-        GetPage(name: '/login-page', page: () => const LoginPage(),transition: Transition.downToUp),
-        GetPage(name: '/register-page', page: () => const RegisterPage(),transition: Transition.downToUp)
-
-
-        /*GetPage(name: '/home', page: () => Homepage()),
-        GetPage(name: '/interest', page: () => InterestAreaPage()),
-        GetPage(name: '/product-list', page: () => ProductsListPage()),
-        GetPage(name: '/product-info', page: () => ProductInfoPage()),*/
-
+        GetPage(
+            name: '/home-page',
+            page: () => const HomePage(),
+            transition: Transition.downToUp),
+        GetPage(
+            name: '/login-page',
+            page: () => LoginPage(),
+            transition: Transition.downToUp),
+        GetPage(
+            name: '/register-page',
+            page: () => RegisterPage(),
+            transition: Transition.downToUp)
       ],
     );
   }

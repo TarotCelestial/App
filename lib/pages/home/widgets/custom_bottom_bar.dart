@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../assets/custom-colors.dart';
 import '../../../controllers/home/home_controller.dart';
-import '../../../customs/CustomAnimatedBottomBar.dart';
+import '../../../widgets/custom_bottom_bar.dart';
 
 class CustomBottomBar extends StatelessWidget {
   const CustomBottomBar({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class CustomBottomBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
         builder: (_) {
-          return CustomAnimatedBottomBar(
+          return CustomBottomBar2(
             containerHeight: 65,
             backgroundColor: Colors.white,
             selectedIndex: _.index,

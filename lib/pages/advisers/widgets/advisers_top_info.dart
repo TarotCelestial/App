@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:tarotcelestial/assets/custom-colors.dart';
 
 class AdvisersTopInfo extends StatelessWidget {
   String photo, name, perk;
-
 
   AdvisersTopInfo(this.photo, this.name, this.perk);
 
@@ -23,7 +24,8 @@ class AdvisersTopInfo extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 30, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   perk,
@@ -35,7 +37,15 @@ class AdvisersTopInfo extends StatelessWidget {
               padding: const EdgeInsets.all(1.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(90),
-                child: Image.network(photo),
+                child: CachedNetworkImage(
+                  imageUrl: photo,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(
+                          child: CircularProgressIndicator(
+                            color: CustomColors.hardPrincipal,
+                              value: downloadProgress.progress)),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
               ),
             ),
           ],

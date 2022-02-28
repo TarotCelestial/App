@@ -1,5 +1,5 @@
 import 'package:flutter_svg/svg.dart';
-import 'package:tarotcelestial/data/models/sections/horoscopo/zodiac_sign.dart';
+import 'package:tarotcelestial/data/models/zodiac_sign_model.dart';
 
 class ZodiacSignsConstants{
   static List zodiacSigns=[

@@ -1,16 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
 
 import '../../../controllers/home/home_controller.dart';
+import '../../../providers/user_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     return GetBuilder<HomeController>(builder: (_) {
+      _.obtainSesion(userProvider);
       return Drawer(
         child: Theme(
           data: ThemeData(accentColor: CustomColors.principal),
@@ -42,35 +47,86 @@ class CustomDrawer extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 7,
                       ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(1),
-                            backgroundColor: MaterialStateProperty.all(
-                                CustomColors.hardPrincipal)),
-                        onPressed: () {
-                          Get.toNamed("/login-page");
-                        },
-                        child: Container(
-                          height: 40,
-                          child: Center(
-                            child: Text(
-                              "Iniciar sesión",
-                              style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
+                      Obx(
+                        () => _.isLoged.value
+                            ? Container(
+                                padding: const EdgeInsets.all(5),
+                                color: Colors.white,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(30),
+                                        child: CachedNetworkImage(
+                                          imageUrl: userProvider
+                                              .getUser()!
+                                              .person!
+                                              .user!
+                                              .getImagen(),
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Center(
+                                                child: CircularProgressIndicator(
+                                                  color: CustomColors.hardPrincipal,
+                                                    value: downloadProgress
+                                                        .progress),
+                                              ),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      userProvider
+                                              .getUser()!
+                                              .person!
+                                              .user!
+                                              .firstName! +
+                                          " " +
+                                          userProvider
+                                              .getUser()!
+                                              .person!
+                                              .user!
+                                              .lastName!,
+                                      style: const TextStyle(fontSize: 17),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : ElevatedButton(
+                                style: ButtonStyle(
+                                    elevation: MaterialStateProperty.all(1),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        CustomColors.hardPrincipal)),
+                                onPressed: () {
+                                  Get.toNamed("/login-page");
+                                },
+                                child: SizedBox(
+                                  height: 40,
+                                  child: Center(
+                                    child: Text(
+                                      "Iniciar sesión",
+                                      style: TextStyle(
+                                          color: CustomColors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              ),
                       ),
                     ],
                   ),
                 ),
               ),
               ListTile(
-                onTap: (){
+                onTap: () {
                   _.changeSection(0);
                   Get.back();
                 },
@@ -86,7 +142,7 @@ class CustomDrawer extends StatelessWidget {
                 selectedColor: CustomColors.hardPrincipal,
               ),
               ListTile(
-                onTap: (){
+                onTap: () {
                   _.changeSection(2);
                   Get.back();
                 },
@@ -102,7 +158,7 @@ class CustomDrawer extends StatelessWidget {
                 selectedColor: CustomColors.hardPrincipal,
               ),
               ListTile(
-                onTap: (){
+                onTap: () {
                   _.changeSection(3);
                   Get.back();
                 },
@@ -117,22 +173,32 @@ class CustomDrawer extends StatelessWidget {
                 selected: _.index == 3,
                 selectedColor: CustomColors.hardPrincipal,
               ),
-              const Divider(color: Colors.black45,),
+              const Divider(
+                color: Colors.black45,
+              ),
               ListTile(
-                leading: Icon(Icons.settings,
-                    color: CustomColors.black),
+                leading: Icon(Icons.settings, color: CustomColors.black),
                 title: const Text(
                   "Configuración",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.info,
-                        color: CustomColors.black),
+                leading: Icon(Icons.info, color: CustomColors.black),
                 title: const Text(
                   "Sobre Tarot Celestial",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
+              ),
+              ListTile(
+                leading: Icon(Icons.logout, color: CustomColors.black),
+                title: const Text(
+                  "Cerrar sesión",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  _.closeSesion();
+                },
               ),
             ],
           ),

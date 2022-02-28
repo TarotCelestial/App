@@ -3,9 +3,9 @@ import 'package:flutter/widgets.dart';
 
 import '../assets/custom-colors.dart';
 
-class CustomAnimatedBottomBar extends StatelessWidget {
+class CustomBottomBar2 extends StatelessWidget {
 
-  CustomAnimatedBottomBar({
+  const CustomBottomBar2({
     Key? key,
     this.selectedIndex = 0,
     this.showElevation = true,
