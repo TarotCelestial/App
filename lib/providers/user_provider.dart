@@ -7,7 +7,5 @@ class UserProvider with ChangeNotifier{
   setUser(PersonalData user){
     _user=user;
   }
-  PersonalData? getUser(){
-    return _user;
-  }
+  PersonalData? get getUser => _user;
 }

@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tarotcelestial/pages/advisers/adviser_info_page.dart';
 
-class AdviserCard extends StatelessWidget {
-  String photo, name, perk;
+import '../controllers/sections/tarotistas_controller.dart';
 
-  AdviserCard(this.photo, this.name, this.perk, {Key? key}) : super(key: key);
+class AdviserCard extends StatelessWidget {
+  TarotistasController controller;
+  int index;
+
+  AdviserCard(this.controller, this.index);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Get.to(const AdviserInfoPage());
+        Get.to(AdviserInfoPage(controller, index));
       },
       child: Card(
         child: Container(
@@ -23,15 +26,15 @@ class AdviserCard extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(90),
-                  child: Image.network(photo),
+                  child: Image.network(controller.tarotistas[index]["user"]["imagen"],),
                 ),
               ),
               Text(
-                name,
+                controller.tarotistas[index]["nombreArtistico"],
                 style: const TextStyle(fontSize: 15),
               ),
               Text(
-                perk,
+                controller.tarotistas[index]["especialidades"][0]["nombre"],
                 style: const TextStyle(fontSize: 15, color: Colors.black54),
               ),
             ],

@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tarotcelestial/assets/custom-colors.dart';
+import 'package:tarotcelestial/pages/advisers/adviser_info_page.dart';
 import 'package:tarotcelestial/pages/advisers/widgets/advisers_top_info.dart';
-
 import '../../controllers/sections/tarotistas_controller.dart';
 
-class TarotistasPage extends StatelessWidget {
-  final tarotistasController = Get.put(TarotistasController());
+class TarotistasPage extends StatefulWidget {
+
   TarotistasPage({Key? key}) : super(key: key);
+
+  @override
+  State<TarotistasPage> createState() => _TarotistasPageState();
+}
+
+class _TarotistasPageState extends State<TarotistasPage> {
+  final tarotistasController = Get.put(TarotistasController());
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,32 +27,28 @@ class TarotistasPage extends StatelessWidget {
         init: tarotistasController,
         initState: tarotistasController.init(),
         builder: (_) {
-          return ListView(
-            children: [
-              AdvisersTopInfo(
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg",
-                "Scarlett",
-                "Amor",
+          if (_.tarotistas == null) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: CustomColors.hardPrincipal,
               ),
-              const Divider(
-                color: Colors.black12,
-                thickness: 6,
-              ),
-              AdvisersTopInfo(
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg",
-                "Scarlett",
-                "Amor",
-              ),
-              const Divider(
-                color: Colors.black12,
-                thickness: 6,
-              ),
-              AdvisersTopInfo(
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg",
-                "Scarlett",
-                "Amor",
-              ),
-            ],
+            );
+          }
+          return ListView.builder(
+            itemCount: _.tarotistas.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                margin: const EdgeInsets.all(8),
+                child: InkWell(
+                  onTap: (){
+                    Get.to(AdviserInfoPage(_,index));
+                  },
+                  child: AdvisersTopInfo(
+                      _, index
+                  ),
+                ),
+              );
+            },
           );
         });
   }

@@ -1,13 +1,15 @@
 import 'package:tarotcelestial/data/models/user_model.dart';
 
 class PersonalData {
+  int? id;
   Person? person;
   int? personType;
   String? accessToken;
 
-  PersonalData({this.person, this.personType, this.accessToken});
+  PersonalData({this.id, this.person, this.personType, this.accessToken});
 
   PersonalData.fromJson(Map<dynamic, dynamic> json) {
+    id=json["id"];
     person =
     json['person'] != null ? Person.fromJson(json['person']) : null;
     personType = json['personType'];
@@ -16,6 +18,7 @@ class PersonalData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data["id"] = id;
     if (person != null) {
       data['person'] = person!.toJson();
     }

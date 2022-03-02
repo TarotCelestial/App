@@ -38,26 +38,10 @@ class HoroscopoMore extends StatelessWidget {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                AdviserCard(
+                /*AdviserCard(
                     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg",
                     "Scarlett",
-                    "Amor"),
-                AdviserCard(
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg",
-                    "Scarlett",
-                    "Amor"),
-                AdviserCard(
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg",
-                    "Scarlett",
-                    "Amor"),
-                AdviserCard(
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg",
-                    "Scarlett",
-                    "Amor"),
-                AdviserCard(
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg",
-                    "Scarlett",
-                    "Amor"),
+                    "Amor"),*/
               ],
             ),
           ),

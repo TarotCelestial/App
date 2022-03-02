@@ -65,7 +65,7 @@ class CustomDrawer extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(30),
                                         child: CachedNetworkImage(
                                           imageUrl: userProvider
-                                              .getUser()!
+                                              .getUser!
                                               .person!
                                               .user!
                                               .getImagen(),
@@ -84,13 +84,13 @@ class CustomDrawer extends StatelessWidget {
                                     ),
                                     Text(
                                       userProvider
-                                              .getUser()!
+                                              .getUser!
                                               .person!
                                               .user!
                                               .firstName! +
                                           " " +
                                           userProvider
-                                              .getUser()!
+                                              .getUser!
                                               .person!
                                               .user!
                                               .lastName!,

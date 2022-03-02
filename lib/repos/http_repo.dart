@@ -19,8 +19,8 @@ class HttpRepo {
     return jsonDecode(data);
   }
 
-  getTarotistas(String token) async {
-    var data = await HttpService().getTarotistas(token);
+  getTarotistas() async {
+    var data = await HttpService().getTarotistas();
     if (data == null) {
       return null;
     }

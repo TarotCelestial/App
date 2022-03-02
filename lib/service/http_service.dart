@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HttpService {
   String? url = dotenv.env['DEVELOPMENT_URL'];
-  
+  String api = "api/v1";
   String user = "api/v1/users";
   login(Map body) async {
     var uri = Uri.parse("$url$user/login/");
@@ -35,12 +35,11 @@ class HttpService {
     return response.body;
   }
 
-  getTarotistas(String token) async {
-    var uri = Uri.parse("$url$user/tarotista/");
+  getTarotistas() async {
+    var uri = Uri.parse("$url$api/listTarotistas");
     var response = await http.get(uri,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Token $token'
         });
     if (response.statusCode != 200) {
       return null;

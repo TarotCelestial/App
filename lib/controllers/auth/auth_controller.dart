@@ -1,8 +1,10 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tarotcelestial/assets/custom-colors.dart';
 import 'package:tarotcelestial/data/models/hive_models/user_data.dart';
 import 'package:tarotcelestial/data/models/personal_data_model.dart';
 import 'package:tarotcelestial/providers/user_provider.dart';
@@ -11,6 +13,7 @@ import 'package:tarotcelestial/widgets/custom_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../data/constants/zodiac_signs_constants.dart';
 import '../../data/models/zodiac_sign_model.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -25,7 +28,7 @@ class AuthController extends GetxController {
 
   login(String email, String password, UserProvider userProvider) async {
     Get.dialog(
-      const Center(child: CircularProgressIndicator())
+      const Center(child: CircularProgressIndicator(color: CustomColors.hardPrincipal,))
     );
     Map body = {"email": email, "password": password};
     try {
@@ -72,7 +75,7 @@ class AuthController extends GetxController {
   register(String email, String psw1, String psw2, String firstNames,
       String lastNames, UserProvider userProvider) async {
     Get.dialog(
-        const Center(child: CircularProgressIndicator())
+        const Center(child: CircularProgressIndicator(color: CustomColors.hardPrincipal,))
     );
     Map body = {
       "email": email,
@@ -87,6 +90,13 @@ class AuthController extends GetxController {
       UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: psw1
+      );
+      await FirebaseChatCore.instance.createUserInFirestore(
+        types.User(
+          firstName: firstNames,
+          id: userCredential.user!.uid,
+          lastName: lastNames,
+        ),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
