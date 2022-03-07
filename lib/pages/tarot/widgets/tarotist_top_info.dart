@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
 import 'package:tarotcelestial/controllers/sections/tarotistas_controller.dart';
+import 'package:tarotcelestial/pages/phones/phones_page.dart';
 
-class AdvisersTopInfo extends StatelessWidget {
+import '../../../controllers/home/home_controller.dart';
+
+class TarotistTopInfo extends StatelessWidget {
   TarotistasController controller;
   int index;
 
-  AdvisersTopInfo(this.controller, this.index, {Key? key}) : super(key: key);
+  TarotistTopInfo(this.controller, this.index, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final homeController = Get.find<HomeController>();
     return SizedBox(
       height: 131,
       width: Get.width,
@@ -33,24 +36,39 @@ class AdvisersTopInfo extends StatelessWidget {
                       style: const TextStyle(
                           fontSize: 30, fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(width: 15,),
-                    Container(
-                      height: 50,
-                      child: Center(
-                        child: Text(
-                          controller.tarotistas[index]["especialidades"][0]["nombre"],
-                          style: const TextStyle(fontSize: 16, color: Colors.black54),
-                        ),
-                      ),
+                    const SizedBox(
+                      width: 15,
                     ),
+                    controller.tarotistas[index]["especialidades"].isEmpty
+                        ? const SizedBox.shrink()
+                        : SizedBox(
+                            height: 50,
+                            child: Center(
+                              child: Text(
+                                controller.tarotistas[index]["especialidades"]
+                                    [0]["nombre"],
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.black54),
+                              ),
+                            ),
+                          ),
                   ],
                 ),
                 Row(
                   children: [
                     ElevatedButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(CustomColors.hardComplementary),),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            CustomColors.hardComplementary),
+                      ),
+                      onPressed: () {
+                        if(homeController.isLoged.value){
 
-                      onPressed: () {},
+                        }else{
+                          Get.to(const PhonesPage());
+                        }
+                        Get.to(const PhonesPage());
+                      },
                       child: SizedBox(
                         width: 90,
                         child: Center(
@@ -72,21 +90,23 @@ class AdvisersTopInfo extends StatelessWidget {
                       width: 10,
                     ),
                     ElevatedButton(
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(CustomColors.hardPrincipal)),
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              CustomColors.hardPrincipal)),
                       onPressed: () {
+                        controller.getUsers();
                       },
                       child: SizedBox(
-                        width: 90,
+                        width: 60,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
+                          children: const [
+                            Icon(
                               Icons.chat_bubble,
                               size: 18,
                             ),
-                            const Divider(),
-                            Text(" "+controller.tarotistas[index]["precioChat"].toString()),
-                            const Text("/min")
+                            Divider(),
+                            Text(" CHAT")
                           ],
                         ),
                       ),

@@ -2,15 +2,15 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
-import 'package:tarotcelestial/pages/advisers/widgets/adviser_perk.dart';
 
 import '../../../controllers/sections/tarotistas_controller.dart';
+import 'tarotist_perk.dart';
 
-class AdviserBodyInfo extends StatelessWidget {
+class TarotistBodyInfo extends StatelessWidget {
   TarotistasController controller;
   int index;
 
-  AdviserBodyInfo(this.controller, this.index);
+  TarotistBodyInfo(this.controller, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class AdviserBodyInfo extends StatelessWidget {
           Wrap(
             children: [
               for(var i in controller.tarotistas[index]["especialidades"])
-                AdviserPerk(i["nombre"])
+                TarotistPerk(i["nombre"])
             ],
           ),
         ],

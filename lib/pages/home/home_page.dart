@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     const ArticulosPage(),
     const ChatsPage(),
     const HoroscopoPage(),
-    const CargarPage(),
+    CargarPage(),
   ];
   @override
   Widget build(BuildContext context) {

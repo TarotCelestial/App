@@ -31,12 +31,14 @@ class PersonalData {
 class Person {
   User? user;
   String? signo;
+  String? pais;
 
-  Person({this.user, this.signo});
+  Person({this.user, this.signo, this.pais});
 
   Person.fromJson(Map<dynamic, dynamic> json) {
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     signo = json['signo'];
+    pais= json['pais'];
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +47,7 @@ class Person {
       data['user'] = user!.toJson();
     }
     data['signo'] = signo;
+    data['pais']=pais;
     return data;
   }
 }

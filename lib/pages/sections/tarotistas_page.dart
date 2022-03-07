@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
-import 'package:tarotcelestial/pages/advisers/adviser_info_page.dart';
-import 'package:tarotcelestial/pages/advisers/widgets/advisers_top_info.dart';
 import '../../controllers/sections/tarotistas_controller.dart';
+import '../tarot/tarotist_info_page.dart';
+import '../tarot/widgets/tarotist_top_info.dart';
 
 class TarotistasPage extends StatefulWidget {
-
   TarotistasPage({Key? key}) : super(key: key);
 
   @override
@@ -34,21 +33,30 @@ class _TarotistasPageState extends State<TarotistasPage> {
               ),
             );
           }
-          return ListView.builder(
-            itemCount: _.tarotistas.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Card(
-                margin: const EdgeInsets.all(8),
-                child: InkWell(
-                  onTap: (){
-                    Get.to(AdviserInfoPage(_,index));
-                  },
-                  child: AdvisersTopInfo(
-                      _, index
+          if (_.tarotistas.isEmpty) {
+            //return const Center(child: Text("No hay datos para mostrar"),);
+            return ElevatedButton(
+                onPressed: () {
+                  _.getUsers();
+                },
+                child: Text(""));
+          }
+          return Theme(
+            data: ThemeData(accentColor: CustomColors.principal),
+            child: ListView.builder(
+              itemCount: _.tarotistas.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(TarotistInfoPage(_, index));
+                    },
+                    child: TarotistTopInfo(_, index),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           );
         });
   }

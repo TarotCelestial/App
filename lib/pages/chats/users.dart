@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import '../../assets/util.dart';
+import '../../repos/personalized_firebase_chat_core_repo.dart';
 import 'chat.dart';
 
 class UsersPage extends StatelessWidget {
   const UsersPage({Key? key}) : super(key: key);
 
   void _handlePressed(types.User otherUser, BuildContext context) async {
-    final room = await FirebaseChatCore.instance.createRoom(otherUser);
+    final room = await PersonalizedFirebaseChatCoreRepo.instance.createRoom(otherUser);
 
     Navigator.of(context).pop();
     await Navigator.of(context).push(
@@ -50,7 +50,7 @@ class UsersPage extends StatelessWidget {
         title: const Text('Users'),
       ),
       body: StreamBuilder<List<types.User>>(
-        stream: FirebaseChatCore.instance.users(),
+        stream: PersonalizedFirebaseChatCoreRepo.instance.users(),
         initialData: const [],
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data!.isEmpty) {

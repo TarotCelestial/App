@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tarotcelestial/widgets/adviser_card.dart';
+import 'package:tarotcelestial/widgets/tarotist_card.dart';
 
 class HoroscopoMore extends StatelessWidget {
   const HoroscopoMore({Key? key}) : super(key: key);

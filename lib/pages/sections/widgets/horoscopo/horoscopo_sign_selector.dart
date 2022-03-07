@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
-import 'package:tarotcelestial/data/constants/zodiac_signs_constants.dart';
+import 'package:tarotcelestial/data/constants/constants.dart';
 
 import '../../../../controllers/sections/horoscopo_controller.dart';
 
@@ -24,18 +24,18 @@ class HoroscopoSignSelector extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                      "Cumpleaños: ${ZodiacSignsConstants.zodiacSigns[_.index].birthRange}",
+                      "Cumpleaños: ${Constants.zodiacSigns[_.index].birthRange}",
                       style:
                           const TextStyle(fontSize: 17, color: Colors.black38)),
                   Text(
-                    ZodiacSignsConstants.zodiacSigns[_.index].name,
+                    Constants.zodiacSigns[_.index].name,
                     style: const TextStyle(fontSize: 50),
                   ),
                   SizedBox(
                     height: 70,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: ZodiacSignsConstants.zodiacSigns.length,
+                      itemCount: Constants.zodiacSigns.length,
                       itemBuilder: (context, index) {
                         return InkResponse(
                           onTap: () {
@@ -55,7 +55,7 @@ class HoroscopoSignSelector extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.all(15.5),
                                 child: SvgPicture.asset(
-                                  ZodiacSignsConstants
+                                  Constants
                                       .zodiacSigns[index].iconPath,
                                   color: _.index == index
                                       ? Colors.white

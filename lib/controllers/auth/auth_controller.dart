@@ -11,14 +11,17 @@ import 'package:tarotcelestial/providers/user_provider.dart';
 import 'package:tarotcelestial/repos/http_repo.dart';
 import 'package:tarotcelestial/widgets/custom_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../data/constants/zodiac_signs_constants.dart';
+import '../../data/constants/constants.dart';
 import '../../data/models/zodiac_sign_model.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
-  ZodiacSign? dropIndex = ZodiacSignsConstants.zodiacSigns.first;
-  List signs = ZodiacSignsConstants.zodiacSigns;
+  ZodiacSign? dropSignIndex = Constants.zodiacSigns.first;
+  String? dropCountryIndex = Constants.countries.first;
+  List signs = Constants.zodiacSigns;
+  List countries = Constants.countries;
+  
   bool showPassword = true;
 
   invertShowPassword() {
@@ -68,19 +71,30 @@ class AuthController extends GetxController {
 
 
   changeSingIndex(ZodiacSign sign){
-    dropIndex=sign;
+    dropSignIndex=sign;
+    update();
+  }
+  changeCountryIndex(String country){
+    dropCountryIndex=country;
     update();
   }
 
   register(String email, String psw1, String psw2, String firstNames,
       String lastNames, UserProvider userProvider) async {
+    if(psw1!=psw2){
+      Get.dialog(
+          CustomDialog("Las contraseñas no coinciden"),
+      );
+      return;
+    }
     Get.dialog(
         const Center(child: CircularProgressIndicator(color: CustomColors.hardPrincipal,))
     );
     Map body = {
       "email": email,
       "username": email,
-      "signo": signs.indexWhere((element) => element.name==dropIndex!.name),
+      "signo": signs.indexWhere((element) => element.name==dropSignIndex!.name),
+      "pais": dropCountryIndex,
       "password": psw1,
       "password_confirmation": psw2,
       "first_name": firstNames,
@@ -96,6 +110,8 @@ class AuthController extends GetxController {
           firstName: firstNames,
           id: userCredential.user!.uid,
           lastName: lastNames,
+          metadata: {"email": email},
+          role: types.Role.user
         ),
       );
     } on FirebaseAuthException catch (e) {

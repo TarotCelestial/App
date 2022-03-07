@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import '../../assets/util.dart';
+import '../../repos/personalized_firebase_chat_core_repo.dart';
 import 'chat.dart';
 
 class RoomsPage extends StatefulWidget {
@@ -89,7 +89,7 @@ class _RoomsPageState extends State<RoomsPage> {
     }
 
     return StreamBuilder<List<types.Room>>(
-      stream: FirebaseChatCore.instance.rooms(),
+      stream: PersonalizedFirebaseChatCoreRepo.instance.rooms(),
       initialData: const [],
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data!.isEmpty) {

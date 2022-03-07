@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
-import 'package:tarotcelestial/pages/advisers/widgets/adviser_body_info.dart';
-import 'package:tarotcelestial/pages/advisers/widgets/advisers_top_info.dart';
 
 import '../../controllers/sections/tarotistas_controller.dart';
+import 'widgets/tarotist_body_info.dart';
+import 'widgets/tarotist_top_info.dart';
 
-class AdviserInfoPage extends StatelessWidget {
+class TarotistInfoPage extends StatelessWidget {
   TarotistasController controller;
   int index;
 
-  AdviserInfoPage(this.controller, this.index, {Key? key}) : super(key: key);
+  TarotistInfoPage(this.controller, this.index, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +19,12 @@ class AdviserInfoPage extends StatelessWidget {
         data: ThemeData(accentColor: CustomColors.principal),
         child: ListView(
           children: [
-            AdvisersTopInfo(controller, index),
+            TarotistTopInfo(controller, index),
             const Divider(
               color: Colors.black12,
               thickness: 6,
             ),
-            AdviserBodyInfo(controller, index),
+            TarotistBodyInfo(controller, index),
           ],
         ),
       ),

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
 import 'package:tarotcelestial/controllers/auth/auth_controller.dart';
-import 'package:tarotcelestial/data/constants/zodiac_signs_constants.dart';
+import 'package:tarotcelestial/data/constants/constants.dart';
 import 'package:tarotcelestial/data/models/zodiac_sign_model.dart';
 
 import '../../providers/user_provider.dart';
@@ -135,32 +135,91 @@ class RegisterPage extends StatelessWidget {
                                       children: [
                                         const Text(
                                           "Signo",
-                                          style: TextStyle(color: Colors.grey, fontSize: 16),
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 16),
                                         ),
                                         Container(
-                                          padding: const EdgeInsets.only(right:25),
+                                          padding:
+                                              const EdgeInsets.only(right: 25),
                                           child: DropdownButton<ZodiacSign>(
-                                            value: _.dropIndex,
-                                            icon:
-                                                const Icon(Icons.arrow_drop_down),
+                                            value: _.dropSignIndex,
+                                            icon: const Icon(
+                                                Icons.arrow_drop_down),
                                             elevation: 16,
                                             style: const TextStyle(
-                                                color: Colors.black, fontSize: 16),
+                                                color: Colors.black,
+                                                fontSize: 16),
                                             underline: const SizedBox.shrink(),
                                             onChanged: (ZodiacSign? newValue) {
                                               _.changeSingIndex(newValue!);
                                             },
                                             items: _.signs.map<
-                                                    DropdownMenuItem<ZodiacSign>>(
+                                                    DropdownMenuItem<
+                                                        ZodiacSign>>(
                                                 (dynamic value) {
-                                              return DropdownMenuItem<ZodiacSign>(
+                                              return DropdownMenuItem<
+                                                  ZodiacSign>(
                                                 value: value,
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(5.0),
+                                                  padding:
+                                                      const EdgeInsets.all(5.0),
                                                   child: Text(value.name),
                                                 ),
                                               );
                                             }).toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                            color: CustomColors.hardPrincipal),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          "País",
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 16),
+                                        ),
+                                        Container(
+                                          padding:
+                                              const EdgeInsets.only(right: 25),
+                                          child: DropdownButton<String>(
+                                            value: _.dropCountryIndex,
+                                            icon: const Icon(
+                                                Icons.arrow_drop_down),
+                                            elevation: 16,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16),
+                                            underline: const SizedBox.shrink(),
+                                            onChanged: (String? newValue) {
+                                              _.changeCountryIndex(newValue!);
+                                            },
+                                            items: _.countries
+                                                .map<DropdownMenuItem<String>>(
+                                              (dynamic value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child: Text(
+                                                      value,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ).toList(),
                                           ),
                                         ),
                                       ],
@@ -204,12 +263,12 @@ class RegisterPage extends StatelessWidget {
                             ),
                             ElevatedButton(
                               onPressed: () => _.register(
-                                      email.text,
-                                      password.text,
-                                      password2.text,
-                                      nombres.text,
-                                      apellidos.text,
-                                      userProvider),
+                                  email.text,
+                                  password.text,
+                                  password2.text,
+                                  nombres.text,
+                                  apellidos.text,
+                                  userProvider),
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
                                       CustomColors.hardPrincipal)),

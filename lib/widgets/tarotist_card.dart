@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tarotcelestial/pages/advisers/adviser_info_page.dart';
 
 import '../controllers/sections/tarotistas_controller.dart';
+import '../pages/tarot/tarotist_info_page.dart';
 
-class AdviserCard extends StatelessWidget {
+class TarotistCard extends StatelessWidget {
   TarotistasController controller;
   int index;
 
-  AdviserCard(this.controller, this.index);
+  TarotistCard(this.controller, this.index);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Get.to(AdviserInfoPage(controller, index));
+        Get.to(TarotistInfoPage(controller, index));
       },
       child: Card(
         child: Container(
