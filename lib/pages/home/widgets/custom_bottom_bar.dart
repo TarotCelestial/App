@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../../../assets/custom-colors.dart';
 import '../../../controllers/home/home_controller.dart';
+import '../../../providers/user_provider.dart';
 import '../../../widgets/custom_bottom_bar.dart';
 
 class CustomBottomBar extends StatelessWidget {
@@ -11,6 +13,7 @@ class CustomBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     return GetBuilder<HomeController>(
         builder: (_) {
           return CustomBottomBar2(
@@ -20,8 +23,9 @@ class CustomBottomBar extends StatelessWidget {
             showElevation: true,
             itemCornerRadius: 22,
             curve: Curves.easeIn,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             onItemSelected: (index) => _.changeSection(index),
-            items: [
+            items: userProvider.getUser?.personType==1||userProvider.getUser?.personType==null?[
               BottomNavyBarItem(
                 icon: const Icon(Icons.search),
                 title: const Text('Tarotistas'),
@@ -59,94 +63,25 @@ class CustomBottomBar extends StatelessWidget {
                 inactiveColor: CustomColors.grey,
                 textAlign: TextAlign.center,
               ),
+            ]:[
+              BottomNavyBarItem(
+                icon: const Icon(Icons.chat_bubble_outline),
+                title: const Text(
+                  'Chats',
+                ),
+                activeColor: CustomColors.hardPrincipal,
+                inactiveColor: CustomColors.grey,
+                textAlign: TextAlign.center,
+              ),
+              BottomNavyBarItem(
+                icon: const Icon(Icons.coffee_outlined,),
+                title: const Text('Artículos'),
+                activeColor: CustomColors.hardPrincipal,
+                inactiveColor: CustomColors.grey,
+                textAlign: TextAlign.center,
+              ),
             ],
           );
         });
-    return BottomAppBar(
-      shape: const CircularNotchedRectangle(),
-      child: IconTheme(
-        data: const IconThemeData(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(9),
-              child: InkResponse(
-                highlightShape: BoxShape.rectangle,
-                containedInkWell: false,
-                onTap: (){
-
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(FontAwesomeIcons.search, color: CustomColors.grey),
-                    const SizedBox(height: 3,),
-                    Text("Asesores", style: TextStyle(fontSize: 15, color: CustomColors.grey),)
-                  ],
-                ),
-              ),
-            ),
-            InkResponse(
-              child: Padding(
-                padding: const EdgeInsets.all(9),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(FontAwesomeIcons.mugHot, color: CustomColors.grey),
-                    const SizedBox(height: 5,),
-                    Text("Artículos", style: TextStyle(fontSize: 15, color: CustomColors.grey),)
-                  ],
-                ),
-              ),
-            ),
-            InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(9),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(FontAwesomeIcons.comment, color: CustomColors.grey),
-                    const SizedBox(height: 5,),
-                    Text("Asesores", style: TextStyle(fontSize: 15, color: CustomColors.grey),)
-                  ],
-                ),
-              ),
-            ),
-            InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(9),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(FontAwesomeIcons.star, color: CustomColors.grey),
-                    const SizedBox(height: 5,),
-                    Text("Asesores", style: TextStyle(fontSize: 15, color: CustomColors.grey),)
-                  ],
-                ),
-              ),
-            ),
-            InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(9),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(FontAwesomeIcons.dollarSign, color: CustomColors.grey),
-                    const SizedBox(height: 5,),
-                    Text("Asesores", style: TextStyle(fontSize: 15, color: CustomColors.grey),)
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

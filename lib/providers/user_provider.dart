@@ -8,4 +8,8 @@ class UserProvider with ChangeNotifier{
     _user=user;
   }
   PersonalData? get getUser => _user;
+
+  setNullUserType(){
+    _user?.personType=null;
+  }
 }

@@ -65,35 +65,28 @@ class CustomDrawer extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(30),
                                         child: CachedNetworkImage(
                                           imageUrl: userProvider
-                                              .getUser!
-                                              .person!
-                                              .user!
+                                              .getUser!.person!.user!
                                               .getImagen(),
                                           progressIndicatorBuilder: (context,
                                                   url, downloadProgress) =>
                                               Center(
-                                                child: CircularProgressIndicator(
-                                                  color: CustomColors.hardPrincipal,
-                                                    value: downloadProgress
-                                                        .progress),
-                                              ),
+                                            child: CircularProgressIndicator(
+                                                color:
+                                                    CustomColors.hardPrincipal,
+                                                value:
+                                                    downloadProgress.progress),
+                                          ),
                                           errorWidget: (context, url, error) =>
                                               const Icon(Icons.error),
                                         ),
                                       ),
                                     ),
                                     Text(
-                                      userProvider
-                                              .getUser!
-                                              .person!
-                                              .user!
+                                      userProvider.getUser!.person!.user!
                                               .firstName! +
                                           " " +
                                           userProvider
-                                              .getUser!
-                                              .person!
-                                              .user!
-                                              .lastName!,
+                                              .getUser!.person!.user!.lastName!,
                                       style: const TextStyle(fontSize: 17),
                                     ),
                                   ],
@@ -135,7 +128,7 @@ class CustomDrawer extends StatelessWidget {
                         ? CustomColors.hardPrincipal
                         : CustomColors.black),
                 title: const Text(
-                  "Asesores",
+                  "Tarotistas",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 selected: _.index == 0,
@@ -143,7 +136,11 @@ class CustomDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  _.changeSection(2);
+                  if(userProvider.getUser?.personType==2){
+                    _.changeSection(0);
+                  }else{
+                    _.changeSection(2);
+                  }
                   Get.back();
                 },
                 leading: Icon(Icons.chat_bubble_outline,
@@ -190,16 +187,20 @@ class CustomDrawer extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
-              ListTile(
-                leading: Icon(Icons.logout, color: CustomColors.black),
-                title: const Text(
-                  "Cerrar sesión",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  _.closeSesion();
-                },
-              ),
+              userProvider.getUser?.personType == null
+                  ? const SizedBox.shrink()
+                  : ListTile(
+                      leading: Icon(Icons.logout, color: CustomColors.black),
+                      title: const Text(
+                        "Cerrar sesión",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      onTap: () {
+                        _.closeSesion(userProvider);
+                        Get.offAllNamed('/home-page');
+                      },
+                    ),
             ],
           ),
         ),

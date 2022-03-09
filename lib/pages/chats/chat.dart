@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tarotcelestial/assets/custom-colors.dart';
 import 'package:tarotcelestial/repos/personalized_firebase_chat_core_repo.dart';
 
 class ChatPage extends StatefulWidget {
@@ -190,6 +191,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
+        backgroundColor: CustomColors.hardPrincipal,
         title: const Text('Chat'),
       ),
       body: StreamBuilder<types.Room>(
@@ -203,6 +205,7 @@ class _ChatPageState extends State<ChatPage> {
               return SafeArea(
                 bottom: false,
                 child: Chat(
+                  l10n: const ChatL10nEs(),
                   isAttachmentUploading: _isAttachmentUploading,
                   messages: snapshot.data ?? [],
                   onAttachmentPressed: _handleAtachmentPressed,

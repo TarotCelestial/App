@@ -10,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tarotcelestial/data/models/hive_models/user_data.dart';
 import 'package:tarotcelestial/data/models/personal_data_model.dart';
+import 'package:tarotcelestial/pages/home/tarotist-home-page.dart';
 import 'package:tarotcelestial/pages/login/login_page.dart';
 import 'package:tarotcelestial/providers/user_provider.dart';
 import 'firebase_options.dart';
@@ -44,16 +45,18 @@ class MyApp extends StatelessWidget {
   MyApp(this.isLoged, this.user); // This widget is the root of your application
   @override
   Widget build(BuildContext context) {
+    String initialRoute='/home-page';
     final box = Hive.box<UserData>('UserData');
-    Future.delayed(Duration.zero, () async {
-      final userProviderReader = context.read<UserProvider>();
-      if (isLoged) {
-        try {
-          userProviderReader
-              .setUser(PersonalData.fromJson(box.getAt(0)!.personalData));
-        } catch (_) {}
-      }
-    });
+    final userProviderReader = context.read<UserProvider>();
+    if (isLoged) {
+      try {
+        userProviderReader
+            .setUser(PersonalData.fromJson(box.getAt(0)!.personalData));
+        if(userProviderReader.getUser?.personType==2){
+          initialRoute='/tarotist-home-page';
+        }
+      } catch (_) {}
+    }
     //Gestion de sesión
     return GetMaterialApp(
       title: 'Flutter Demo',
@@ -61,13 +64,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/home-page',
+      initialRoute: initialRoute,
       defaultTransition: Transition.leftToRight,
       //registro de rutas de la aplicación, las transitions son animaciones de cambio de pagina
       getPages: [
         GetPage(
             name: '/home-page',
-            page: () => const HomePage(),
+            page: () => const HomePage()),
+        GetPage(
+            name: '/tarotist-home-page',
+            page: () => const TarotistHomePage(),
             transition: Transition.downToUp),
         GetPage(
             name: '/login-page',
@@ -76,7 +82,8 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/register-page',
             page: () => RegisterPage(),
-            transition: Transition.downToUp)
+            transition: Transition.downToUp),
+
       ],
     );
   }

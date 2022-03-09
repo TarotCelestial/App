@@ -27,14 +27,14 @@ class PersonalizedFirebaseChatCoreRepo {
 
   /// Singleton instance
   static final PersonalizedFirebaseChatCoreRepo instance =
-  PersonalizedFirebaseChatCoreRepo._privateConstructor();
+      PersonalizedFirebaseChatCoreRepo._privateConstructor();
 
   /// Gets proper [FirebaseFirestore] instance
   FirebaseFirestore getFirebaseFirestore() {
     return config.firebaseAppName != null
         ? FirebaseFirestore.instanceFor(
-      app: Firebase.app(config.firebaseAppName!),
-    )
+            app: Firebase.app(config.firebaseAppName!),
+          )
         : FirebaseFirestore.instance;
   }
 
@@ -76,7 +76,7 @@ class PersonalizedFirebaseChatCoreRepo {
       'userIds': roomUsers.map((u) => u.id).toList(),
       'userRoles': roomUsers.fold<Map<String, String?>>(
         {},
-            (previousValue, user) => {
+        (previousValue, user) => {
           ...previousValue,
           user.id: user.role?.toShortString(),
         },
@@ -96,9 +96,9 @@ class PersonalizedFirebaseChatCoreRepo {
   /// Creates a direct chat for 2 people. Add [metadata] for any additional
   /// custom data.
   Future<types.Room> createRoom(
-      types.User otherUser, {
-        Map<String, dynamic>? metadata,
-      }) async {
+    types.User otherUser, {
+    Map<String, dynamic>? metadata,
+  }) async {
     final fu = firebaseUser;
 
     if (fu == null) return Future.error('User does not exist');
@@ -200,13 +200,13 @@ class PersonalizedFirebaseChatCoreRepo {
 
   /// Returns a stream of messages from Firebase for a given room
   Stream<List<types.Message>> messages(
-      types.Room room, {
-        List<Object?>? endAt,
-        List<Object?>? endBefore,
-        int? limit,
-        List<Object?>? startAfter,
-        List<Object?>? startAt,
-      }) {
+    types.Room room, {
+    List<Object?>? endAt,
+    List<Object?>? endBefore,
+    int? limit,
+    List<Object?>? startAfter,
+    List<Object?>? startAt,
+  }) {
     var query = getFirebaseFirestore()
         .collection('${config.roomsCollectionName}/${room.id}/messages')
         .orderBy('createdAt', descending: true);
@@ -232,13 +232,13 @@ class PersonalizedFirebaseChatCoreRepo {
     }
 
     return query.snapshots().map(
-          (snapshot) {
+      (snapshot) {
         return snapshot.docs.fold<List<types.Message>>(
           [],
-              (previousValue, doc) {
+          (previousValue, doc) {
             final data = doc.data();
             final author = room.users.firstWhere(
-                  (u) => u.id == data['authorId'],
+              (u) => u.id == data['authorId'],
               orElse: () => types.User(id: data['authorId'] as String),
             );
 
@@ -266,12 +266,12 @@ class PersonalizedFirebaseChatCoreRepo {
         .snapshots()
         .asyncMap(
           (doc) => processRoomDocument(
-        doc,
-        fu,
-        getFirebaseFirestore(),
-        config.usersCollectionName,
-      ),
-    );
+            doc,
+            fu,
+            getFirebaseFirestore(),
+            config.usersCollectionName,
+          ),
+        );
   }
 
   /// Returns a stream of rooms from Firebase. Only rooms where current
@@ -291,21 +291,21 @@ class PersonalizedFirebaseChatCoreRepo {
 
     final collection = orderByUpdatedAt
         ? getFirebaseFirestore()
-        .collection(config.roomsCollectionName)
-        .where('userIds', arrayContains: fu.uid)
-        .orderBy('updatedAt', descending: true)
+            .collection(config.roomsCollectionName)
+            .where('userIds', arrayContains: fu.uid)
+            .orderBy('updatedAt', descending: true)
         : getFirebaseFirestore()
-        .collection(config.roomsCollectionName)
-        .where('userIds', arrayContains: fu.uid);
+            .collection(config.roomsCollectionName)
+            .where('userIds', arrayContains: fu.uid);
 
     return collection.snapshots().asyncMap(
           (query) => processRoomsQuery(
-        fu,
-        getFirebaseFirestore(),
-        query,
-        config.usersCollectionName,
-      ),
-    );
+            fu,
+            getFirebaseFirestore(),
+            query,
+            config.usersCollectionName,
+          ),
+        );
   }
 
   /// Sends a message to the Firestore. Accepts any partial message and a
@@ -363,7 +363,7 @@ class PersonalizedFirebaseChatCoreRepo {
 
     final messageMap = message.toJson();
     messageMap.removeWhere(
-            (key, value) => key == 'author' || key == 'createdAt' || key == 'id');
+        (key, value) => key == 'author' || key == 'createdAt' || key == 'id');
     messageMap['authorId'] = message.author.id;
     messageMap['updatedAt'] = FieldValue.serverTimestamp();
 
@@ -380,7 +380,7 @@ class PersonalizedFirebaseChatCoreRepo {
 
     final roomMap = room.toJson();
     roomMap.removeWhere((key, value) =>
-    key == 'createdAt' ||
+        key == 'createdAt' ||
         key == 'id' ||
         key == 'lastMessages' ||
         key == 'users');
@@ -394,7 +394,7 @@ class PersonalizedFirebaseChatCoreRepo {
       final messageMap = m.toJson();
 
       messageMap.removeWhere((key, value) =>
-      key == 'author' ||
+          key == 'author' ||
           key == 'createdAt' ||
           key == 'id' ||
           key == 'updatedAt');
@@ -420,44 +420,43 @@ class PersonalizedFirebaseChatCoreRepo {
         .snapshots()
         .map(
           (snapshot) => snapshot.docs.fold<List<types.User>>(
-        [],
+            [],
             (previousValue, doc) {
-          if (firebaseUser!.uid == doc.id) return previousValue;
+              if (firebaseUser!.uid == doc.id) return previousValue;
 
-          final data = doc.data();
+              final data = doc.data();
 
-          data['createdAt'] = data['createdAt']?.millisecondsSinceEpoch;
-          data['id'] = doc.id;
-          data['lastSeen'] = data['lastSeen']?.millisecondsSinceEpoch;
-          data['updatedAt'] = data['updatedAt']?.millisecondsSinceEpoch;
+              data['createdAt'] = data['createdAt']?.millisecondsSinceEpoch;
+              data['id'] = doc.id;
+              data['lastSeen'] = data['lastSeen']?.millisecondsSinceEpoch;
+              data['updatedAt'] = data['updatedAt']?.millisecondsSinceEpoch;
 
-          return [...previousValue, types.User.fromJson(data)];
-        },
-      ),
-    );
+              return [...previousValue, types.User.fromJson(data)];
+            },
+          ),
+        );
   }
 
-  Stream<List<types.User>> filtredUsers(List<String> list) {
-    if (firebaseUser == null) return const Stream.empty();
+  Future<List<types.User>> findUser(Map filter) {
     return getFirebaseFirestore()
-        .collection(config.usersCollectionName).where('metadata', whereIn: [{"email":"ea@gmail.com"}])
-        .snapshots()
-        .map(
-          (snapshot) => snapshot.docs.fold<List<types.User>>(
-        [],
-            (previousValue, doc) {
-          if (firebaseUser!.uid == doc.id) return previousValue;
+        .collection(config.usersCollectionName)
+        .where('metadata', isEqualTo: filter)
+        .get().then((value)  {
+          return value.docs.fold<List<types.User>>(
+            [],
+                (previousValue, doc) {
+              if (firebaseUser!.uid == doc.id) return previousValue;
 
-          final data = doc.data();
+              final data = doc.data();
 
-          data['createdAt'] = data['createdAt']?.millisecondsSinceEpoch;
-          data['id'] = doc.id;
-          data['lastSeen'] = data['lastSeen']?.millisecondsSinceEpoch;
-          data['updatedAt'] = data['updatedAt']?.millisecondsSinceEpoch;
+              data['createdAt'] = data['createdAt']?.millisecondsSinceEpoch;
+              data['id'] = doc.id;
+              data['lastSeen'] = data['lastSeen']?.millisecondsSinceEpoch;
+              data['updatedAt'] = data['updatedAt']?.millisecondsSinceEpoch;
 
-          return [...previousValue, types.User.fromJson(data)];
-        },
-      ),
-    );
+              return [...previousValue, types.User.fromJson(data)];
+            },
+          );
+    });
   }
 }

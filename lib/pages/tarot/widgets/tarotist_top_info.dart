@@ -16,7 +16,6 @@ class TarotistTopInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homeController = Get.find<HomeController>();
     return SizedBox(
       height: 131,
       width: Get.width,
@@ -32,9 +31,9 @@ class TarotistTopInfo extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      controller.tarotistas[index]["nombreArtistico"],
+                      controller.tarotistas[index]["nombre_artistico"],
                       style: const TextStyle(
-                          fontSize: 30, fontWeight: FontWeight.bold),
+                          fontSize: 27, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       width: 15,
@@ -48,7 +47,7 @@ class TarotistTopInfo extends StatelessWidget {
                                 controller.tarotistas[index]["especialidades"]
                                     [0]["nombre"],
                                 style: const TextStyle(
-                                    fontSize: 16, color: Colors.black54),
+                                    fontSize: 14, color: Colors.black54),
                               ),
                             ),
                           ),
@@ -62,11 +61,6 @@ class TarotistTopInfo extends StatelessWidget {
                             CustomColors.hardComplementary),
                       ),
                       onPressed: () {
-                        if(homeController.isLoged.value){
-
-                        }else{
-                          Get.to(const PhonesPage());
-                        }
                         Get.to(const PhonesPage());
                       },
                       child: SizedBox(
@@ -94,7 +88,12 @@ class TarotistTopInfo extends StatelessWidget {
                           backgroundColor: MaterialStateProperty.all(
                               CustomColors.hardPrincipal)),
                       onPressed: () {
-                        controller.getUsers();
+                        final homeController = Get.find<HomeController>();
+                        homeController.changeSection(2);
+                        try {
+                          controller.CreateRoom(
+                              controller.tarotistas[index]["user"]["email"]);
+                        } catch (_) {}
                       },
                       child: SizedBox(
                         width: 60,

@@ -67,11 +67,11 @@ class _RoomsPageState extends State<RoomsPage> {
       child: CircleAvatar(
         backgroundColor: hasImage ? Colors.transparent : color,
         backgroundImage: hasImage ? NetworkImage(room.imageUrl!) : null,
-        radius: 20,
+        radius: 25,
         child: !hasImage
             ? Text(
                 name.isEmpty ? '' : name[0].toUpperCase(),
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white, fontSize: 22),
               )
             : null,
       ),
@@ -98,7 +98,7 @@ class _RoomsPageState extends State<RoomsPage> {
             margin: const EdgeInsets.only(
               bottom: 200,
             ),
-            child: const Text('Aun no tienes conversaciones'),
+            child: const Text('Aun no tienes conversaciones', style: TextStyle(fontSize: 18),),
           );
         }
 
@@ -107,7 +107,7 @@ class _RoomsPageState extends State<RoomsPage> {
           itemBuilder: (context, index) {
             final room = snapshot.data![index];
 
-            return GestureDetector(
+            return InkWell(
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -125,7 +125,7 @@ class _RoomsPageState extends State<RoomsPage> {
                 child: Row(
                   children: [
                     _buildAvatar(room),
-                    Text(room.name ?? ''),
+                    Text(room.name ?? '', style: TextStyle(fontSize: 18),),
                   ],
                 ),
               ),

@@ -66,7 +66,11 @@ class AuthController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoged', true);
     Get.back();
-    Get.offAllNamed('/home-page');
+    if(userProvider.getUser?.personType==1){
+      Get.offAllNamed('/home-page');
+    }else{
+      Get.offAllNamed('/tarotist-home-page');
+    }
   }
 
 

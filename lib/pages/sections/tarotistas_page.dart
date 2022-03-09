@@ -34,12 +34,9 @@ class _TarotistasPageState extends State<TarotistasPage> {
             );
           }
           if (_.tarotistas.isEmpty) {
-            //return const Center(child: Text("No hay datos para mostrar"),);
-            return ElevatedButton(
-                onPressed: () {
-                  _.getUsers();
-                },
-                child: Text(""));
+            return const Center(
+              child: Text("No hay datos para mostrar"),
+            );
           }
           return Theme(
             data: ThemeData(accentColor: CustomColors.principal),
