@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
 import '../../controllers/sections/tarotistas_controller.dart';
-import '../tarot/tarotist_info_page.dart';
-import '../tarot/widgets/tarotist_top_info.dart';
+import '../tarotist/tarotist_info_page.dart';
+import '../tarotist/widgets/tarotist_top_info.dart';
 
 class TarotistasPage extends StatefulWidget {
   TarotistasPage({Key? key}) : super(key: key);

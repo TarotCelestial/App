@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controllers/sections/tarotistas_controller.dart';
-import '../pages/tarot/tarotist_info_page.dart';
+import '../pages/tarotist/tarotist_info_page.dart';
 
 class TarotistCard extends StatelessWidget {
   int index;

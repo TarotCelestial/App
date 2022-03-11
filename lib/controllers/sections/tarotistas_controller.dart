@@ -18,17 +18,17 @@ class TarotistasController extends GetxController {
 
   Future getUser(String email) async {
     Map filter = {"email": email};
-    var user =
-        await PersonalizedFirebaseChatCoreRepo.instance.findUser(filter);
-    if(user.isEmpty){
+    var user = await PersonalizedFirebaseChatCoreRepo.instance.findUser(filter);
+    if (user.isEmpty) {
       return;
     }
     return user.first;
   }
 
-  CreateRoom(String email) async {
+  CreateRoom(String email, int userId, int tarotisId, String token) async {
+    var response = await HttpRepo().createChat({"id": tarotisId}, userId, token);
     var user = await getUser(email);
-    if(user == null){
+    if (user == null || response == null) {
       Get.dialog(CustomDialog("Ah sucedido un error"));
       return;
     }

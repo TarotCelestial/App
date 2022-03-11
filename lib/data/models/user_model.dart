@@ -1,4 +1,5 @@
 class User {
+  int? id;
   String? email;
   String? firstName;
   String? lastName;
@@ -14,6 +15,7 @@ class User {
   User({this.email, this.firstName, this.lastName, this.imagen});
 
   User.fromJson(Map<dynamic, dynamic> json) {
+    id = json["id"];
     email = json['email'];
     firstName = json['first_name'];
     lastName = json['last_name'];
@@ -22,10 +24,16 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data["id"] = id;
     data['email'] = email;
     data['first_name'] = firstName;
     data['last_name'] = lastName;
     data['imagen'] = imagen;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'User{id: $id, email: $email, firstName: $firstName, lastName: $lastName, imagen: $imagen}';
   }
 }

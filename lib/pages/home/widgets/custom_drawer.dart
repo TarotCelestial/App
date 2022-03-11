@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
+import 'package:tarotcelestial/pages/configuration/configuration_page.dart';
 
 import '../../../controllers/home/home_controller.dart';
 import '../../../providers/user_provider.dart';
@@ -136,9 +137,9 @@ class CustomDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  if(userProvider.getUser?.personType==2){
+                  if (userProvider.getUser?.personType == 2) {
                     _.changeSection(0);
-                  }else{
+                  } else {
                     _.changeSection(2);
                   }
                   Get.back();
@@ -173,13 +174,19 @@ class CustomDrawer extends StatelessWidget {
               const Divider(
                 color: Colors.black45,
               ),
-              ListTile(
-                leading: Icon(Icons.settings, color: CustomColors.black),
-                title: const Text(
-                  "Configuración",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
+              userProvider.getUser!.personType == 2
+                  ? ListTile(
+                      onTap: () {
+                        Get.to(ConfigurationPage());
+                      },
+                      leading: Icon(Icons.settings, color: CustomColors.black),
+                      title: const Text(
+                        "Configuración",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
               ListTile(
                 leading: Icon(Icons.info, color: CustomColors.black),
                 title: const Text(

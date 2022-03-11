@@ -44,7 +44,7 @@ dependencies:
   firebase_auth: ^3.3.7
   firebase_storage:
   cloud_firestore: ^3.1.8
-  flutter_chat_ui:
+  flutter_chat_ui: ^1.5.5
   flutter_firebase_chat_core: ^1.5.2
   faker:
   file_picker:
@@ -59,6 +59,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flag: ^6.0.0
   url_launcher: ^6.0.20
+  flutter_widget_from_html: ^0.8.5
 
 
 dev_dependencies:

@@ -4,7 +4,7 @@ import 'package:tarotcelestial/widgets/tarotist_card.dart';
 
 import '../../../../assets/custom-colors.dart';
 import '../../../../controllers/sections/tarotistas_controller.dart';
-import '../../../tarot/tarotist_info_page.dart';
+import '../../../tarotist/tarotist_info_page.dart';
 
 class HoroscopoMore extends StatelessWidget {
   const HoroscopoMore({Key? key}) : super(key: key);

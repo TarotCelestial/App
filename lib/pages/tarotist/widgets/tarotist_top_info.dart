@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
 import 'package:tarotcelestial/controllers/sections/tarotistas_controller.dart';
 import 'package:tarotcelestial/pages/phones/phones_page.dart';
 
 import '../../../controllers/home/home_controller.dart';
+import '../../../providers/user_provider.dart';
 
 class TarotistTopInfo extends StatelessWidget {
   TarotistasController controller;
@@ -16,6 +18,7 @@ class TarotistTopInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     return SizedBox(
       height: 131,
       width: Get.width,
@@ -90,10 +93,11 @@ class TarotistTopInfo extends StatelessWidget {
                       onPressed: () {
                         final homeController = Get.find<HomeController>();
                         homeController.changeSection(2);
-                        try {
                           controller.CreateRoom(
-                              controller.tarotistas[index]["user"]["email"]);
-                        } catch (_) {}
+                              controller.tarotistas[index]["user"]["email"],
+                              userProvider.getUser!.person!.id!,
+                              controller.tarotistas[index]["user"]["id"],
+                              userProvider.getUser!.accessToken!);
                       },
                       child: SizedBox(
                         width: 60,

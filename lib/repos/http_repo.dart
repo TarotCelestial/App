@@ -35,4 +35,20 @@ class HttpRepo {
 
     return jsonDecode(data);
   }
+  createChat(Map body, int userId, String token) async {
+    var data = await HttpService().createChat(body, userId, token);
+    if (data == null) {
+      return null;
+    }
+    return data;
+  }
+
+  getPost() async {
+    var data = await HttpService().getPost();
+    if (data == null) {
+      return {};
+    }
+
+    return jsonDecode(data);
+  }
 }

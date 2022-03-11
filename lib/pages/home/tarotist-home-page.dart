@@ -18,7 +18,7 @@ class _TarotistHomePageState extends State<TarotistHomePage> {
   final homeSectionController = Get.put(HomeController());
   List pages = [
     const ChatsPage(),
-    const ArticulosPage(),
+    ArticulosPage(),
   ];
   @override
   Widget build(BuildContext context) {

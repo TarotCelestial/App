@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   final homeSectionController = Get.put(HomeController());
   List pages = [
     TarotistasPage(),
-    const ArticulosPage(),
+    ArticulosPage(),
     const ChatsPage(),
     const HoroscopoPage(),
     CargarPage(),

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
 import 'package:tarotcelestial/controllers/auth/auth_controller.dart';
-import 'package:tarotcelestial/data/constants/constants.dart';
 import 'package:tarotcelestial/data/models/zodiac_sign_model.dart';
 
 import '../../providers/user_provider.dart';
