@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tarotcelestial/widgets/tarotist_card.dart';
 
+import '../../../../assets/custom-colors.dart';
+import '../../../../controllers/sections/tarotistas_controller.dart';
+import '../../../tarot/tarotist_info_page.dart';
+
 class HoroscopoMore extends StatelessWidget {
   const HoroscopoMore({Key? key}) : super(key: key);
 
@@ -35,15 +39,36 @@ class HoroscopoMore extends StatelessWidget {
           const SizedBox(height: 10),
           SizedBox(
             height: 170,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                /*AdviserCard(
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Woman_1.jpg/768px-Woman_1.jpg",
-                    "Scarlett",
-                    "Amor"),*/
-              ],
-            ),
+            child: GetBuilder<TarotistasController>(
+                builder: (_) {
+                  if (_.tarotistas == null) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: CustomColors.hardPrincipal,
+                      ),
+                    );
+                  }
+                  if (_.tarotistas.isEmpty) {
+                    return const Center(
+                      child: Text("No hay datos para mostrar"),
+                    );
+                  }
+                  return Theme(
+                    data: ThemeData(accentColor: CustomColors.principal),
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _.tarotistas.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return InkWell(
+                          onTap: () {
+                            Get.to(TarotistInfoPage(index));
+                          },
+                          child: TarotistCard(index),
+                        );
+                      },
+                    ),
+                  );
+                }),
           ),
         ],
       ),

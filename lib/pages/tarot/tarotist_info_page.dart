@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
 
 import '../../controllers/sections/tarotistas_controller.dart';
@@ -6,13 +7,13 @@ import 'widgets/tarotist_body_info.dart';
 import 'widgets/tarotist_top_info.dart';
 
 class TarotistInfoPage extends StatelessWidget {
-  TarotistasController controller;
   int index;
 
-  TarotistInfoPage(this.controller, this.index, {Key? key}) : super(key: key);
+  TarotistInfoPage( this.index, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    TarotistasController controller = Get.find<TarotistasController>();
     return Scaffold(
       appBar: AppBar(backgroundColor: CustomColors.hardPrincipal),
       body: Theme(

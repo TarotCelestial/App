@@ -26,4 +26,13 @@ class HttpRepo {
     }
     return jsonDecode(data);
   }
+
+  getHoroscope() async {
+    var data = await HttpService().getHoroscope();
+    if (data == null) {
+      return {};
+    }
+
+    return jsonDecode(data);
+  }
 }

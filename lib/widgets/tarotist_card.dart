@@ -5,16 +5,16 @@ import '../controllers/sections/tarotistas_controller.dart';
 import '../pages/tarot/tarotist_info_page.dart';
 
 class TarotistCard extends StatelessWidget {
-  TarotistasController controller;
   int index;
 
-  TarotistCard(this.controller, this.index);
+  TarotistCard( this.index);
 
   @override
   Widget build(BuildContext context) {
+    TarotistasController controller = Get.find<TarotistasController>();
     return InkWell(
       onTap: (){
-        Get.to(TarotistInfoPage(controller, index));
+        Get.to(TarotistInfoPage(index));
       },
       child: Card(
         child: Container(
@@ -30,7 +30,7 @@ class TarotistCard extends StatelessWidget {
                 ),
               ),
               Text(
-                controller.tarotistas[index]["nombreArtistico"],
+                controller.tarotistas[index]["nombre_artistico"],
                 style: const TextStyle(fontSize: 15),
               ),
               Text(

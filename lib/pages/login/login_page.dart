@@ -92,22 +92,22 @@ class LoginPage extends StatelessWidget {
                                         controller: password,
                                         obscureText: _.showPassword,
                                         decoration: InputDecoration(
-                                            hintText: "Contraseña",
-                                            hintStyle: const TextStyle(
-                                                color: Colors.grey),
-                                            border: InputBorder.none,
-                                            suffixIcon: IconButton(
-                                                onPressed: () {
-                                                  _.invertShowPassword();
-                                                },
-                                                icon: Icon(
-                                                  _.showPassword
-                                                      ? FontAwesomeIcons.eye
-                                                      : FontAwesomeIcons
-                                                          .eyeSlash,
-                                                  color: CustomColors
-                                                      .hardPrincipal,
-                                                ),),),
+                                          hintText: "Contraseña",
+                                          hintStyle: const TextStyle(
+                                              color: Colors.grey),
+                                          border: InputBorder.none,
+                                          suffixIcon: IconButton(
+                                            onPressed: () {
+                                              _.invertShowPassword();
+                                            },
+                                            icon: Icon(
+                                              _.showPassword
+                                                  ? FontAwesomeIcons.eye
+                                                  : FontAwesomeIcons.eyeSlash,
+                                              color: CustomColors.hardPrincipal,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -124,8 +124,8 @@ class LoginPage extends StatelessWidget {
                                 height: 40,
                               ),
                               ElevatedButton(
-                                onPressed: () =>
-                                    _.login(email.text, password.text, userProvider),
+                                onPressed: () => _.login(
+                                    email.text, password.text, userProvider),
                                 style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         CustomColors.hardPrincipal)),

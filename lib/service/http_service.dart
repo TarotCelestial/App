@@ -46,4 +46,16 @@ class HttpService {
     }
     return response.body;
   }
+
+  getHoroscope() async {
+    var uri = Uri.parse("https://horoscopefree.herokuapp.com/daily/es/");
+    var response = await http.get(uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        });
+    if (response.statusCode != 200) {
+      return null;
+    }
+    return response.body;
+  }
 }
