@@ -53,35 +53,46 @@ class CustomDrawer extends StatelessWidget {
                       Obx(
                         () => _.isLoged.value
                             ? Container(
+                                height: 50,
                                 padding: const EdgeInsets.all(5),
                                 color: Colors.white,
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                      userProvider.getUser!.personType == 1
+                                          ? MainAxisAlignment.center
+                                          : MainAxisAlignment.spaceAround,
                                   children: [
-                                    SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(30),
-                                        child: CachedNetworkImage(
-                                          imageUrl: userProvider
-                                              .getUser!.person!.user!
-                                              .getImagen(),
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              Center(
-                                            child: CircularProgressIndicator(
-                                                color:
-                                                    CustomColors.hardPrincipal,
-                                                value:
-                                                    downloadProgress.progress),
+                                    userProvider.getUser!.personType == 1
+                                        ? const SizedBox.shrink()
+                                        : SizedBox(
+                                            height: 50,
+                                            width: 50,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              child: CachedNetworkImage(
+                                                fit: BoxFit.cover,
+                                                imageUrl: userProvider
+                                                    .getUser!.person!.user!
+                                                    .getImagen(),
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                          color: CustomColors
+                                                              .hardPrincipal,
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Icon(Icons.error),
+                                              ),
+                                            ),
                                           ),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                        ),
-                                      ),
-                                    ),
                                     Text(
                                       userProvider.getUser!.person!.user!
                                               .firstName! +
@@ -177,7 +188,7 @@ class CustomDrawer extends StatelessWidget {
               userProvider.getUser!.personType == 2
                   ? ListTile(
                       onTap: () {
-                        Get.to(ConfigurationPage());
+                        Get.to(() => ConfigurationPage());
                       },
                       leading: Icon(Icons.settings, color: CustomColors.black),
                       title: const Text(

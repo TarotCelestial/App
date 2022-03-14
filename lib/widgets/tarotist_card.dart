@@ -6,14 +6,14 @@ import '../pages/tarotist/tarotist_info_page.dart';
 class TarotistCard extends StatelessWidget {
   int index;
 
-  TarotistCard( this.index);
+  TarotistCard(this.index);
 
   @override
   Widget build(BuildContext context) {
     TarotistasController controller = Get.find<TarotistasController>();
     return InkWell(
-      onTap: (){
-        Get.to(TarotistInfoPage(index));
+      onTap: () {
+        Get.to(()=>TarotistInfoPage(index));
       },
       child: Card(
         child: Container(
@@ -25,7 +25,13 @@ class TarotistCard extends StatelessWidget {
                 padding: const EdgeInsets.all(10.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(90),
-                  child: Image.network(controller.tarotistas[index]["user"]["imagen"],),
+                  child: SizedBox(
+                    height: 85,
+                      width: 85,
+                      child: Image.network(
+                    controller.tarotistas[index]["user"]["imagen"],
+                    fit: BoxFit.cover,
+                  )),
                 ),
               ),
               Text(

@@ -64,7 +64,7 @@ class TarotistTopInfo extends StatelessWidget {
                             CustomColors.hardComplementary),
                       ),
                       onPressed: () {
-                        Get.to(const PhonesPage());
+                        Get.to(() => const PhonesPage());
                       },
                       child: SizedBox(
                         width: 90,
@@ -93,11 +93,11 @@ class TarotistTopInfo extends StatelessWidget {
                       onPressed: () {
                         final homeController = Get.find<HomeController>();
                         homeController.changeSection(2);
-                          controller.CreateRoom(
-                              controller.tarotistas[index]["user"]["email"],
-                              userProvider.getUser!.person!.id!,
-                              controller.tarotistas[index]["user"]["id"],
-                              userProvider.getUser!.accessToken!);
+                        controller.CreateRoom(
+                            controller.tarotistas[index]["user"]["email"],
+                            userProvider.getUser!.person!.id!,
+                            controller.tarotistas[index]["user"]["id"],
+                            userProvider.getUser!.accessToken!);
                       },
                       child: SizedBox(
                         width: 60,
@@ -118,11 +118,14 @@ class TarotistTopInfo extends StatelessWidget {
                 )
               ],
             ),
-            Padding(
+            Container(
+              height: 100,
+              width: 100,
               padding: const EdgeInsets.all(1.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(90),
                 child: CachedNetworkImage(
+                  fit: BoxFit.cover,
                   imageUrl: controller.tarotistas[index]["user"]["imagen"],
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       Center(

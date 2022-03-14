@@ -34,7 +34,7 @@ class TarotistasController extends GetxController {
     }
     final room =
         await PersonalizedFirebaseChatCoreRepo.instance.createRoom(user);
-    Get.to(
+    Get.to(()=>
       ChatPage(
         room: room,
       ),

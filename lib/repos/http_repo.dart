@@ -51,4 +51,12 @@ class HttpRepo {
 
     return jsonDecode(data);
   }
+
+  getQuestions(String token, int id) async {
+    var data = await HttpService().getQuestions(token, id);
+    if (data == null) {
+      return;
+    }
+    return jsonDecode(data);
+  }
 }

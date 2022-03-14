@@ -61,7 +61,7 @@ class HoroscopoMore extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
                           onTap: () {
-                            Get.to(TarotistInfoPage(index));
+                            Get.to(()=>TarotistInfoPage(index));
                           },
                           child: TarotistCard(index),
                         );

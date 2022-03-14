@@ -117,4 +117,15 @@ class HttpService {
     return response.statusCode;
   }
 
+  getQuestions(String token, int id)async{
+    var uri = Uri.parse("$url$api/ask/$id/");
+    var response = await http.get(uri, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': "Token $token"
+    });
+    if (response.statusCode != 200) {
+      return;
+    }
+    return response.body;
+  }
 }

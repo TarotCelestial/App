@@ -1,17 +1,19 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
+import 'package:tarotcelestial/controllers/home/home_controller.dart';
+import 'package:tarotcelestial/controllers/sections/chats_controller.dart';
 import 'package:tarotcelestial/repos/personalized_firebase_chat_core_repo.dart';
+
+import '../../providers/user_provider.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({
@@ -26,123 +28,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  bool _isAttachmentUploading = false;
-
-  void _handleAtachmentPressed() {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: SizedBox(
-            height: 144,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _handleImageSelection();
-                  },
-                  child: const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Photo'),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _handleFileSelection();
-                  },
-                  child: const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('File'),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Cancel'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _handleFileSelection() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
-    );
-
-    if (result != null && result.files.single.path != null) {
-      _setAttachmentUploading(true);
-      final name = result.files.single.name;
-      final filePath = result.files.single.path!;
-      final file = File(filePath);
-
-      try {
-        final reference = FirebaseStorage.instance.ref(name);
-        await reference.putFile(file);
-        final uri = await reference.getDownloadURL();
-
-        final message = types.PartialFile(
-          mimeType: lookupMimeType(filePath),
-          name: name,
-          size: result.files.single.size,
-          uri: uri,
-        );
-
-        PersonalizedFirebaseChatCoreRepo.instance.sendMessage(message, widget.room.id);
-        _setAttachmentUploading(false);
-      } finally {
-        _setAttachmentUploading(false);
-      }
-    }
-  }
-
-  void _handleImageSelection() async {
-    final result = await ImagePicker().pickImage(
-      imageQuality: 70,
-      maxWidth: 1440,
-      source: ImageSource.gallery,
-    );
-
-    if (result != null) {
-      _setAttachmentUploading(true);
-      final file = File(result.path);
-      final size = file.lengthSync();
-      final bytes = await result.readAsBytes();
-      final image = await decodeImageFromList(bytes);
-      final name = result.name;
-
-      try {
-        final reference = FirebaseStorage.instance.ref(name);
-        await reference.putFile(file);
-        final uri = await reference.getDownloadURL();
-
-        final message = types.PartialImage(
-          height: image.height.toDouble(),
-          name: name,
-          size: size,
-          uri: uri,
-          width: image.width.toDouble(),
-        );
-
-        PersonalizedFirebaseChatCoreRepo.instance.sendMessage(
-          message,
-          widget.room.id,
-        );
-        _setAttachmentUploading(false);
-      } finally {
-        _setAttachmentUploading(false);
-      }
-    }
-  }
-
+  final chatController = Get.put(ChatController());
   void _handleMessageTap(BuildContext context, types.Message message) async {
     if (message is types.FileMessage) {
       var localPath = message.uri;
@@ -170,7 +56,8 @@ class _ChatPageState extends State<ChatPage> {
   ) {
     final updatedMessage = message.copyWith(previewData: previewData);
 
-    PersonalizedFirebaseChatCoreRepo.instance.updateMessage(updatedMessage, widget.room.id);
+    PersonalizedFirebaseChatCoreRepo.instance
+        .updateMessage(updatedMessage, widget.room.id);
   }
 
   void _handleSendPressed(types.PartialText message) {
@@ -180,14 +67,9 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  void _setAttachmentUploading(bool uploading) {
-    setState(() {
-      _isAttachmentUploading = uploading;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -198,24 +80,100 @@ class _ChatPageState extends State<ChatPage> {
         initialData: widget.room,
         stream: PersonalizedFirebaseChatCoreRepo.instance.room(widget.room.id),
         builder: (context, snapshot) {
-          return StreamBuilder<List<types.Message>>(
-            initialData: const [],
-            stream: PersonalizedFirebaseChatCoreRepo.instance.messages(snapshot.data!),
-            builder: (context, snapshot) {
-              return SafeArea(
-                bottom: false,
-                child: Chat(
-                  l10n: const ChatL10nEs(),
-                  isAttachmentUploading: _isAttachmentUploading,
-                  messages: snapshot.data ?? [],
-                  onAttachmentPressed: _handleAtachmentPressed,
-                  onMessageTap: _handleMessageTap,
-                  onPreviewDataFetched: _handlePreviewDataFetched,
-                  onSendPressed: _handleSendPressed,
-                  user: types.User(
-                    id: PersonalizedFirebaseChatCoreRepo.instance.firebaseUser?.uid ?? '',
+          return GetBuilder<ChatController>(
+            init: chatController,
+            initState: chatController.init(userProvider),
+            builder: (_) {
+              if (_.loading) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: CustomColors.hardPrincipal,
                   ),
-                ),
+                );
+              }
+              if (_.preguntas == -1) {
+                return const Center(
+                  child: Text("ha sucedido un error"),
+                );
+              }
+              return StreamBuilder<List<types.Message>>(
+                initialData: const [],
+                stream: PersonalizedFirebaseChatCoreRepo.instance
+                    .messages(snapshot.data!),
+                builder: (context, snapshot) {
+                  return Stack(
+                    children: [
+                      SafeArea(
+                        bottom: false,
+                        child: Chat(
+                          l10n: const ChatL10nEs(),
+                          messages: snapshot.data ?? [],
+                          onMessageTap: _handleMessageTap,
+                          onPreviewDataFetched: _handlePreviewDataFetched,
+                          onSendPressed: _handleSendPressed,
+                          user: types.User(
+                            id: PersonalizedFirebaseChatCoreRepo
+                                    .instance.firebaseUser?.uid ??
+                                '',
+                          ),
+                        ),
+                      ),
+                      _.preguntas == 0
+                          ? Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                color: CustomColors.hardPrincipal,
+                                height: 80,
+                                width: Get.width,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      const Text("Parece que no te quedan mas preguntas",style: TextStyle(
+                                        fontSize: 18,
+                                          color: Colors.white),),
+                                      GestureDetector(
+                                        onTap: (){
+                                          Get.find<HomeController>().changeSection(4);
+                                          Get.back();
+                                        },
+                                        child: const Text("Recarga y no te quedes con la duda",style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                            decoration: TextDecoration.underline,
+                                            color: Colors.white),),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: CustomColors.hardPrincipal.withOpacity(0.8),
+                            border: Border.all(
+                                color: CustomColors.hardPrincipal, width: 2),
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(10.0),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Preguntas restantes: " + _.preguntas.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                },
               );
             },
           );

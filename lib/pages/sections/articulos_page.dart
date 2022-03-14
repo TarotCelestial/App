@@ -29,7 +29,7 @@ class ArticulosPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: (){
-                    Get.to(Post(index));
+                    Get.to(()=>Post(index));
                   },
                     child: ArticuloCard(index));
               },

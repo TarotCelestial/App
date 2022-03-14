@@ -47,7 +47,7 @@ class _TarotistasPageState extends State<TarotistasPage> {
                   margin: const EdgeInsets.all(8),
                   child: InkWell(
                     onTap: () {
-                      Get.to(TarotistInfoPage(index));
+                      Get.to(()=>TarotistInfoPage(index));
                     },
                     child: TarotistTopInfo(_, index),
                   ),

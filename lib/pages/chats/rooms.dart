@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:get/get.dart';
+import 'package:tarotcelestial/assets/custom-colors.dart';
 import '../../assets/util.dart';
 import '../../repos/personalized_firebase_chat_core_repo.dart';
 import 'chat.dart';
@@ -92,16 +94,29 @@ class _RoomsPageState extends State<RoomsPage> {
       stream: PersonalizedFirebaseChatCoreRepo.instance.rooms(),
       initialData: const [],
       builder: (context, snapshot) {
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        if (!snapshot.hasData) {
           return Container(
             alignment: Alignment.center,
             margin: const EdgeInsets.only(
               bottom: 200,
             ),
-            child: const Text('Aun no tienes conversaciones', style: TextStyle(fontSize: 18),),
+            child: const Text(
+              'Aun no tienes conversaciones',
+              style: TextStyle(fontSize: 18),
+            ),
           );
         }
-
+        if (snapshot.data!.isEmpty) {
+          return Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.only(
+              bottom: 200,
+            ),
+            child: const CircularProgressIndicator(
+              color: CustomColors.hardPrincipal,
+            ),
+          );
+        }
         return ListView.builder(
           itemCount: snapshot.data!.length,
           itemBuilder: (context, index) {
@@ -109,13 +124,9 @@ class _RoomsPageState extends State<RoomsPage> {
 
             return InkWell(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ChatPage(
-                      room: room,
-                    ),
-                  ),
-                );
+                Get.to(()=>ChatPage(
+                  room: room,
+                ));
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -125,7 +136,10 @@ class _RoomsPageState extends State<RoomsPage> {
                 child: Row(
                   children: [
                     _buildAvatar(room),
-                    Text(room.name ?? '', style: TextStyle(fontSize: 18),),
+                    Text(
+                      room.name ?? '',
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ],
                 ),
               ),

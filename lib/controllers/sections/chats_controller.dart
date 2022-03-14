@@ -1,18 +1,32 @@
 import 'dart:core';
 import 'package:get/get.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
+import 'package:tarotcelestial/repos/http_repo.dart';
+
+import '../../providers/user_provider.dart';
 
 class ChatController extends GetxController {
+  bool loading=true;
+  var preguntas;
 
-  createUser()async{
-    await FirebaseChatCore.instance.createUserInFirestore(
-      const types.User(
-        firstName: 'John',
-        id: 'TneUfkw9AYe2GrntwXSb7SFPjAy2', // UID from Firebase Authentication
-        imageUrl: 'https://i.pravatar.cc/300',
-        lastName: 'Doe',
-      ),
-    );
+  init(UserProvider userProvider){
+    if(userProvider.getUser!.personType==2){
+      preguntas=0;
+      loading=false;
+      update();
+      return;
+    }
+    HttpRepo().getQuestions(userProvider.getUser!.accessToken!,
+        userProvider.getUser!.person!.id!).then((value){
+      if(value==null){
+        preguntas = -1;
+        loading=false;
+        update();
+        return;
+      }
+      preguntas = value["preguntas"];
+      loading=false;
+      update();
+      return;
+    });
   }
 }
