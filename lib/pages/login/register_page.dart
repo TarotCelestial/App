@@ -295,9 +295,7 @@ class RegisterPage extends StatelessWidget {
                                           color: CustomColors.hardPrincipal,
                                           fontWeight: FontWeight.bold),
                                       recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-
-                                        }),
+                                        ..onTap = () => _launchURL()),
                                 ],
                               ),
                             ),
@@ -308,13 +306,17 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         );
       }),
     );
   }
+
   void _launchURL() async {
-    if (!await launch("https://www.gabinetetarotcelestial.com/politica-de-privacidad")) throw 'Could not launch';
+    if (!await launch(
+        "https://www.gabinetetarotcelestial.com/politica-de-privacidad")) {
+      throw 'Could not launch';
+    }
   }
 }

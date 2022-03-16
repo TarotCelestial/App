@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
 import 'package:tarotcelestial/data/constants/constants.dart';
 
 import '../../../../controllers/sections/horoscopo_controller.dart';
+import '../../../../providers/user_provider.dart';
 
 class HoroscopoSignSelector extends StatelessWidget {
   final horoscopoController = Get.put(HoroscopoController());
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     return GetBuilder<HoroscopoController>(
-        initState: horoscopoController.init(),
+        initState: horoscopoController.init(userProvider.getUser!.person!.signo),
         init: horoscopoController,
         builder: (_) {
           return SizedBox(

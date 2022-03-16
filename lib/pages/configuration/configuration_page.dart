@@ -44,6 +44,7 @@ class ConfigurationPage extends StatelessWidget {
                       ),
                       errorWidget: (context, url, error) =>
                           const Icon(Icons.error),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),

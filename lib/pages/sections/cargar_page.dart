@@ -7,15 +7,24 @@ import '../../controllers/sections/cargar_controller.dart';
 
 class CargarPage extends StatelessWidget {
   CargarController cargarController = Get.put(CargarController());
+  CargarPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CargarController>(
       init: cargarController,
       builder: (_) {
+        _.init();
+        if (_.available == false) {
+          const Center(
+            child: CircularProgressIndicator(
+              backgroundColor: CustomColors.hardPrincipal,
+            ),
+          );
+        }
         return Column(
           children: [
-            Container(
+            SizedBox(
               height: 40,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

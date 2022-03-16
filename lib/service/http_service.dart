@@ -93,12 +93,15 @@ class HttpService {
     } catch (e) {
       print(e);
     }
-    if(url==null){
+    if (url == null) {
       return;
     }
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser!;
-    FirebaseFirestore.instance.collection("users").doc(user.uid).update({'imageUrl': url});
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .update({'imageUrl': url});
     await changePhoto({"url": url}, userId, token);
     return url;
   }
@@ -117,7 +120,7 @@ class HttpService {
     return response.statusCode;
   }
 
-  getQuestions(String token, int id)async{
+  getQuestions(String token, int id) async {
     var uri = Uri.parse("$url$api/ask/$id/");
     var response = await http.get(uri, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -127,5 +130,20 @@ class HttpService {
       return;
     }
     return response.body;
+  }
+
+  decreaseQuestions(int id, String token) async {
+    var uri = Uri.parse("$url$api/decreaseQuestions/$id/");
+    var response = await http.patch(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Token $token"
+      },
+    );
+    if (response.statusCode != 200) {
+      return;
+    }
+    return response.statusCode;
   }
 }

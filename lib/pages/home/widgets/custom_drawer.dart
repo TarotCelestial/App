@@ -53,7 +53,7 @@ class CustomDrawer extends StatelessWidget {
                       Obx(
                         () => _.isLoged.value
                             ? Container(
-                                height: 50,
+                                height: 60,
                                 padding: const EdgeInsets.all(5),
                                 color: Colors.white,
                                 child: Row(

@@ -59,4 +59,12 @@ class HttpRepo {
     }
     return jsonDecode(data);
   }
+
+  decreaseQuestions(int id, String token) async{
+    var data = await HttpService().decreaseQuestions(id, token);
+    if (data == null) {
+      return;
+    }
+    return data;
+  }
 }

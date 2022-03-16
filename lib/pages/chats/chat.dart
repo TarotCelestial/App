@@ -60,11 +60,13 @@ class _ChatPageState extends State<ChatPage> {
         .updateMessage(updatedMessage, widget.room.id);
   }
 
-  void _handleSendPressed(types.PartialText message) {
-    PersonalizedFirebaseChatCoreRepo.instance.sendMessage(
-      message,
-      widget.room.id,
-    );
+  void _handleSendPressed(types.PartialText message) async{
+    if(await chatController.decreace()){
+      PersonalizedFirebaseChatCoreRepo.instance.sendMessage(
+        message,
+        widget.room.id,
+      );
+    }
   }
 
   @override
@@ -149,7 +151,7 @@ class _ChatPageState extends State<ChatPage> {
                               ),
                             )
                           : const SizedBox.shrink(),
-                      Align(
+                      userProvider.getUser!.personType==1? Align(
                         alignment: Alignment.topRight,
                         child: Container(
                           decoration: BoxDecoration(
@@ -170,7 +172,7 @@ class _ChatPageState extends State<ChatPage> {
                             ),
                           ),
                         ),
-                      )
+                      ):const SizedBox.shrink()
                     ],
                   );
                 },

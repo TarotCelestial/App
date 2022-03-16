@@ -6,8 +6,8 @@ class HoroscopoController extends GetxController {
   var Horoscope = {}.obs;
   int index=0;
 
-  init(){
-    index=0;
+  init(sign){
+    index=int.parse(sign??"0");
     HttpRepo().getHoroscope().then((value){
       Horoscope.value = value;
     });
