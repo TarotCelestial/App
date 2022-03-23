@@ -100,9 +100,8 @@ class _RoomsPageState extends State<RoomsPage> {
             margin: const EdgeInsets.only(
               bottom: 200,
             ),
-            child: const Text(
-              'Aun no tienes conversaciones',
-              style: TextStyle(fontSize: 18),
+            child: const CircularProgressIndicator(
+              color: CustomColors.hardPrincipal,
             ),
           );
         }
@@ -112,8 +111,9 @@ class _RoomsPageState extends State<RoomsPage> {
             margin: const EdgeInsets.only(
               bottom: 200,
             ),
-            child: const CircularProgressIndicator(
-              color: CustomColors.hardPrincipal,
+            child: const Text(
+              'Aun no tienes conversaciones',
+              style: TextStyle(fontSize: 18),
             ),
           );
         }

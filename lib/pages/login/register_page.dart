@@ -13,8 +13,10 @@ class RegisterPage extends StatelessWidget {
   TextEditingController nombres = TextEditingController();
   TextEditingController apellidos = TextEditingController();
   TextEditingController email = TextEditingController();
+  TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController password2 = TextEditingController();
+  TextEditingController referalCode = TextEditingController();
 
   RegisterPage({Key? key}) : super(key: key);
 
@@ -231,6 +233,24 @@ class RegisterPage extends StatelessWidget {
                                     ),
                                   ),
                                   child: TextField(
+                                    controller: phone,
+                                    cursorColor: CustomColors.hardPrincipal,
+                                    decoration: const InputDecoration(
+                                        hintText: "Teléfono",
+                                        hintStyle:
+                                        TextStyle(color: Colors.grey),
+                                        border: InputBorder.none),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                          color: CustomColors.hardPrincipal),
+                                    ),
+                                  ),
+                                  child: TextField(
                                     controller: password,
                                     cursorColor: CustomColors.hardPrincipal,
                                     decoration: const InputDecoration(
@@ -242,11 +262,29 @@ class RegisterPage extends StatelessWidget {
                                 ),
                                 Container(
                                   padding: const EdgeInsets.all(10),
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                          color: CustomColors.hardPrincipal),
+                                    ),
+                                  ),
                                   child: TextField(
                                     controller: password2,
                                     cursorColor: CustomColors.hardPrincipal,
                                     decoration: const InputDecoration(
                                         hintText: "Contraseña nuevamente",
+                                        hintStyle:
+                                        TextStyle(color: Colors.grey),
+                                        border: InputBorder.none),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  child: TextField(
+                                    controller: referalCode,
+                                    cursorColor: CustomColors.hardPrincipal,
+                                    decoration: const InputDecoration(
+                                        hintText: "Codigo de referido",
                                         hintStyle:
                                             TextStyle(color: Colors.grey),
                                         border: InputBorder.none),
@@ -261,8 +299,10 @@ class RegisterPage extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () => _.register(
                                 email.text,
+                                phone.text,
                                 password.text,
                                 password2.text,
+                                referalCode.text,
                                 nombres.text,
                                 apellidos.text,
                                 userProvider),

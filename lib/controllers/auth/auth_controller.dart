@@ -85,7 +85,7 @@ class AuthController extends GetxController {
     update();
   }
 
-  register(String email, String psw1, String psw2, String firstNames,
+  register(String email, String phone, String psw1, String psw2, String referalCode, String firstNames,
       String lastNames, UserProvider userProvider) async {
     if (psw1 != psw2) {
       Get.dialog(
@@ -103,8 +103,10 @@ class AuthController extends GetxController {
       "signo":
           signs.indexWhere((element) => element.name == dropSignIndex!.name),
       "pais": dropCountryIndex,
+      "phone_number": phone,
       "password": psw1,
       "password_confirmation": psw2,
+      "referal_code": referalCode,
       "first_name": firstNames,
       "last_name": lastNames
     };

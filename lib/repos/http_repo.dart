@@ -67,4 +67,12 @@ class HttpRepo {
     }
     return data;
   }
+
+  increaseQuestions(int id, int bought, String token) async{
+    var data = await HttpService().increaseQuestions(id, bought, token);
+    if (data == null) {
+      return;
+    }
+    return data;
+  }
 }

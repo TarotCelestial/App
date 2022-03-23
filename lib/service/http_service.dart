@@ -146,4 +146,20 @@ class HttpService {
     }
     return response.statusCode;
   }
+
+  increaseQuestions(int id, int bought, String token) async {
+    var uri = Uri.parse("$url$api/increaseQuestions/$id/");
+    var response = await http.patch(
+      uri,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': "Token $token"
+      },
+      body: jsonEncode({'questions': bought})
+    );
+    if (response.statusCode != 200) {
+      return;
+    }
+    return response.statusCode;
+  }
 }

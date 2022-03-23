@@ -185,10 +185,10 @@ class CustomDrawer extends StatelessWidget {
               const Divider(
                 color: Colors.black45,
               ),
-              userProvider.getUser!.personType == 2
+              userProvider.getUser?.personType == 2
                   ? ListTile(
                       onTap: () {
-                        Get.to(() => ConfigurationPage());
+                        Get.to(() => const ConfigurationPage());
                       },
                       leading: Icon(Icons.settings, color: CustomColors.black),
                       title: const Text(

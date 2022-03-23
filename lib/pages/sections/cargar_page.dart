@@ -1,22 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
 
+import '../../controllers/home/home_controller.dart';
 import '../../controllers/sections/cargar_controller.dart';
+import '../../providers/user_provider.dart';
 
 class CargarPage extends StatelessWidget {
   CargarController cargarController = Get.put(CargarController());
+
   CargarPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    return GetBuilder<HomeController>(builder: (_) {
+      _.obtainSesion(userProvider);
+      return Obx(() => _.isLoged.value
+          ? cargar(userProvider)
+          : Padding(
+        padding: const EdgeInsets.all(100.0),
+        child: Column(
+          children: [
+            Text(
+              "Inicia sesión para chatear",
+              style: TextStyle(
+                  color: CustomColors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            ElevatedButton(
+              style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(1),
+                  backgroundColor: MaterialStateProperty.all(
+                      CustomColors.hardPrincipal)),
+              onPressed: () {
+                Get.toNamed("/login-page");
+              },
+              child: SizedBox(
+                height: 40,
+                child: Center(
+                  child: Text(
+                    "Iniciar sesión",
+                    style: TextStyle(
+                        color: CustomColors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ));
+    });
+  }
+
+  @override
+  Widget cargar(UserProvider userProvider) {
     return GetBuilder<CargarController>(
       init: cargarController,
       builder: (_) {
-        _.init();
-        if (_.available == false) {
-          const Center(
+        _.init(userProvider);
+        if (_.available == false || _.products.isEmpty) {
+          return const Center(
             child: CircularProgressIndicator(
               backgroundColor: CustomColors.hardPrincipal,
             ),
@@ -43,7 +95,7 @@ class CargarPage extends StatelessWidget {
             Expanded(
               child: ListView.builder(
                 physics: const BouncingScrollPhysics(),
-                itemCount: _.value.length,
+                itemCount: _.products.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(25, 15, 25, 10),
@@ -67,7 +119,7 @@ class CargarPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              _.text[index],
+                              _.products[index].description,
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -76,7 +128,7 @@ class CargarPage extends StatelessWidget {
                                       : Colors.black87),
                             ),
                             Text(
-                              "\$${_.value[index]}",
+                              _.products[index].price,
                               style: TextStyle(
                                   fontSize: 18,
                                   color: _.getIndex() == index
@@ -98,13 +150,13 @@ class CargarPage extends StatelessWidget {
                   backgroundColor:
                       MaterialStateProperty.all(CustomColors.hardPrincipal),
                 ),
-                onPressed: () {},
+                onPressed: () => _.buy(),
                 child: SizedBox(
                   width: Get.width,
                   height: 50,
                   child: Center(
                       child: Text(
-                    "Paga \$${_.value[_.getIndex()]}",
+                    "Paga ${_.products[_.getIndex()].price}",
                     style: const TextStyle(fontSize: 20),
                   )),
                 ),

@@ -15,7 +15,7 @@ class HoroscopoSignSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     return GetBuilder<HoroscopoController>(
-        initState: horoscopoController.init(userProvider.getUser!.person!.signo),
+        initState: horoscopoController.init(userProvider.getUser),
         init: horoscopoController,
         builder: (_) {
           return SizedBox(
