@@ -9,6 +9,7 @@ import 'package:tarotcelestial/repos/http_repo.dart';
 import 'package:tarotcelestial/widgets/custom_dialog.dart';
 
 class CargarController extends GetxController {
+  bool bought = false;
   bool available = false;
   int _index = 0;
   List<ProductDetails> products = [];
@@ -32,10 +33,13 @@ class CargarController extends GetxController {
         update();
       }
     }
-    final Stream<List<PurchaseDetails>> purchaseUpdated = InAppPurchase.instance.purchaseStream;
-    _subscription = purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
+    final Stream<List<PurchaseDetails>> purchaseUpdated =
+        InAppPurchase.instance.purchaseStream;
+    _subscription =
+        purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
       _listenToPurchaseUpdated(purchaseDetailsList, userProvider);
     }, onDone: () {
+      print("terminado");
       _subscription!.cancel();
     }, onError: (error) {
       // handle error here.
@@ -55,7 +59,9 @@ class CargarController extends GetxController {
         if (purchaseDetails.status == PurchaseStatus.error) {
           //Get.dialog(CustomDialog("Ah sucedido un error"));
         } else if (purchaseDetails.status == PurchaseStatus.purchased) {
-          increaseQuestions(userProvider, purchaseDetails);
+          if (!bought) {
+            increaseQuestions(userProvider, purchaseDetails);
+          }
         }
       }
     });
@@ -76,20 +82,36 @@ class CargarController extends GetxController {
     return _index;
   }
 
-  increaseQuestions(UserProvider userProvider, PurchaseDetails purchaseDetails) async {
+  increaseQuestions(
+      UserProvider userProvider, PurchaseDetails purchaseDetails) async {
+    bought = true;
+    Get.dialog(
+      Dialog(
+        child: Container(
+          height: 60,
+          width: 60,
+          padding: const EdgeInsets.all(40),
+          child: const CircularProgressIndicator(color: CustomColors.hardPrincipal,),
+        )
+      ),
+    );
     var url = await HttpRepo().increaseQuestions(
         userProvider.getUser!.person!.id!,
         _index + 1,
         userProvider.getUser!.accessToken!);
     await InAppPurchase.instance.completePurchase(purchaseDetails);
+    Get.back();
     if (url == null) {
-      /*Get.dialog(
+      Get.dialog(
         CustomDialog("Ah sucedido un error"),
-      );*/
+      );
       return;
     }
-    /*Get.dialog(
-      CustomDialog("Felicidades, ya puedes usar tus deseos"),
-    );*/
+
+    Get.defaultDialog(
+      title: "Felicidades",
+      content: const Text("Ya puedes usar tus deseos"),
+    );
+    bought = false;
   }
 }
