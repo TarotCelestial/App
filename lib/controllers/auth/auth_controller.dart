@@ -33,10 +33,14 @@ class AuthController extends GetxController {
   }
 
   login(String email, String password, UserProvider userProvider) async {
-    Get.dialog(const Center(
+    Get.dialog(
+      const Center(
         child: CircularProgressIndicator(
-      color: CustomColors.hardPrincipal,
-    )));
+          color: CustomColors.hardPrincipal,
+        ),
+      ),
+      barrierDismissible: false
+    );
     Map body = {"email": email, "password": password};
     try {
       UserCredential userCredential = await FirebaseAuth.instance
@@ -85,8 +89,15 @@ class AuthController extends GetxController {
     update();
   }
 
-  register(String email, String phone, String psw1, String psw2, String referalCode, String firstNames,
-      String lastNames, UserProvider userProvider) async {
+  register(
+      String email,
+      String phone,
+      String psw1,
+      String psw2,
+      String referalCode,
+      String firstNames,
+      String lastNames,
+      UserProvider userProvider) async {
     if (psw1 != psw2) {
       Get.dialog(
         CustomDialog("Las contraseñas no coinciden"),
@@ -168,7 +179,31 @@ class AuthController extends GetxController {
       );
       return;
     }
-    userProvider.getUser!.person!.user!.imagen=url;
+    userProvider.getUser!.person!.user!.imagen = url;
+    update();
+  }
+
+  changeOnlineStatus(UserProvider userProvider) async {
+    Get.dialog(
+        const Center(
+          child: CircularProgressIndicator(
+            color: CustomColors.hardPrincipal,
+          ),
+        ),
+        barrierDismissible: false
+    );
+    var response = await HttpRepo().changeOnlineStatus(
+        userProvider.getUser!.person!.user!.id!,
+        userProvider.getUser!.accessToken!);
+    if (response == null) {
+      Get.dialog(
+        CustomDialog("Ha sucedido un error"),
+      );
+      Get.back();
+      return;
+    }
+    Get.back();
+    userProvider.getUser!.person!.user!.online = response;
     update();
   }
 }

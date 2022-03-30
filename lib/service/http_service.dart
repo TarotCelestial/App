@@ -39,12 +39,12 @@ class HttpService {
   getTarotistas() async {
     var uri = Uri.parse("$url$api/listTarotistas");
     var response = await http.get(uri, headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
+      'Content-Type': 'application/json; charset=utf-8',
     });
     if (response.statusCode != 200) {
       return;
     }
-    return response.body;
+    return response.bodyBytes;
   }
 
   getHoroscope() async {
@@ -161,5 +161,20 @@ class HttpService {
       return;
     }
     return response.statusCode;
+  }
+
+  changeOnlineStatus(int id, String token) async {
+    var uri = Uri.parse("$url$api/onlineStatus/$id/");
+    var response = await http.patch(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': "Token $token"
+        },
+    );
+    if (response.statusCode != 200) {
+      return;
+    }
+    return jsonDecode(response.body)["status"];
   }
 }

@@ -63,6 +63,45 @@ class ConfigurationPage extends StatelessWidget {
                     style: TextStyle(fontSize: 17),
                   ),
                 ),
+                //a switch for online status
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: SwitchListTile(
+                    //Stilize the switch
+                    activeColor: Colors.green,
+                    inactiveThumbColor: Colors.red,
+                    inactiveTrackColor: Colors.red,
+                    activeTrackColor: Colors.green,
+                    title: Row(
+                      children: [
+                        //Text for the switch, very stilized
+                        const Text("Estado",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          userProvider.getUser!.person!.user!.online!
+                              ? "Online"
+                              : "Offline",
+                          style: TextStyle(
+                            color: userProvider.getUser!.person!.user!.online!
+                                ? Colors.green
+                                : Colors.red,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ],
+                    ),
+                    value: userProvider.getUser!.person?.user!.online ?? false,
+                    onChanged: (value) {
+                      _.changeOnlineStatus(userProvider);
+                    },
+                  ),
+                ),
               ],
             ),
           );

@@ -4,6 +4,7 @@ class User {
   String? firstName;
   String? lastName;
   String? imagen;
+  bool? online;
 
   String getImagen() {
     if (imagen == "") {
@@ -20,6 +21,7 @@ class User {
     firstName = json['first_name'];
     lastName = json['last_name'];
     imagen = json['imagen'];
+    online = json['online'];
   }
 
   Map<String, dynamic> toJson() {
@@ -29,11 +31,12 @@ class User {
     data['first_name'] = firstName;
     data['last_name'] = lastName;
     data['imagen'] = imagen;
+    data['online'] = online;
     return data;
   }
 
   @override
   String toString() {
-    return 'User{id: $id, email: $email, firstName: $firstName, lastName: $lastName, imagen: $imagen}';
+    return 'User{id: $id, email: $email, firstName: $firstName, lastName: $lastName, imagen: $imagen, online: $online}';
   }
 }

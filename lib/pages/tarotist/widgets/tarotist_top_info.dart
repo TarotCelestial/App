@@ -122,18 +122,67 @@ class TarotistTopInfo extends StatelessWidget {
               height: 100,
               width: 100,
               padding: const EdgeInsets.all(1.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(90),
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: controller.tarotistas[index]["user"]["imagen"],
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(
-                          child: CircularProgressIndicator(
-                              color: CustomColors.hardPrincipal,
-                              value: downloadProgress.progress)),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(90),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl: controller.tarotistas[index]["user"]
+                                  ["imagen"] !=
+                              ""
+                          ? controller.tarotistas[index]["user"]["imagen"]
+                          : "https://firebasestorage.googleapis.com/v0/b/tarotcelestialapp.appspot.com/o/tarotistas%2Fdefault.jpg?alt=media&token=45842cca-d351-402f-beb9-2ff2caf597b2",
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(
+                                  color: CustomColors.hardPrincipal,
+                                  value: downloadProgress.progress)),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Container(
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              controller.tarotistas[index]["user"]["online"]
+                                  ? "ONLINE"
+                                  : "OFFLINE",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: controller.tarotistas[index]["user"]
+                                        ["online"]
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Container(
+                              height: 10,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                  color: controller.tarotistas[index]["user"]
+                                          ["online"]
+                                      ? Colors.green
+                                      : Colors.red,
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                          ],
+                        )),
+                  ),
+                ],
               ),
             ),
           ],

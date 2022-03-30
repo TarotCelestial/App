@@ -7,7 +7,10 @@ class HoroscopoController extends GetxController {
   int index = 0;
 
   init(user) {
-    index = int.parse(user != null ? user.person!.signo : "0");
+    try{
+      index = int.parse(user != null ? user.person!.signo : "0");
+    } catch (e) {
+    }
     HttpRepo().getHoroscope().then((value) {
       Horoscope.value = value;
     });

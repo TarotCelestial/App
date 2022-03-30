@@ -24,7 +24,7 @@ class HttpRepo {
     if (data == null) {
       return null;
     }
-    return jsonDecode(data);
+    return jsonDecode(utf8.decode(data));
   }
 
   getHoroscope() async {
@@ -70,6 +70,14 @@ class HttpRepo {
 
   increaseQuestions(int id, int bought, String token) async{
     var data = await HttpService().increaseQuestions(id, bought, token);
+    if (data == null) {
+      return;
+    }
+    return data;
+  }
+
+  changeOnlineStatus(int id, String token) async{
+    var data = await HttpService().changeOnlineStatus(id, token);
     if (data == null) {
       return;
     }

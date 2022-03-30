@@ -25,7 +25,7 @@ class CargarPage extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              "Inicia sesión para chatear",
+              "Inicia sesión para cargar",
               style: TextStyle(
                   color: CustomColors.black,
                   fontSize: 18,

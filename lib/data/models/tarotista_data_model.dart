@@ -50,14 +50,16 @@ class User {
   String? firstName;
   String? lastName;
   String? imagen;
+  bool ? online;
 
-  User({this.email, this.firstName, this.lastName, this.imagen});
+  User({this.email, this.firstName, this.lastName, this.imagen, this.online});
 
   User.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     firstName = json['first_name'];
     lastName = json['last_name'];
     imagen = json['imagen'];
+    online = json['online'];
   }
 
   Map<String, dynamic> toJson() {
@@ -66,6 +68,7 @@ class User {
     data['first_name'] = this.firstName;
     data['last_name'] = this.lastName;
     data['imagen'] = this.imagen;
+    data['online'] = this.online;
     return data;
   }
 }

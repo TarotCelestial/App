@@ -29,7 +29,11 @@ class TarotistCard extends StatelessWidget {
                     height: 85,
                       width: 85,
                       child: Image.network(
-                    controller.tarotistas[index]["user"]["imagen"],
+                        controller.tarotistas[index]["user"]
+                        ["imagen"] !=
+                            ""
+                            ? controller.tarotistas[index]["user"]["imagen"]
+                            : "https://firebasestorage.googleapis.com/v0/b/tarotcelestialapp.appspot.com/o/tarotistas%2Fdefault.jpg?alt=media&token=45842cca-d351-402f-beb9-2ff2caf597b2",
                     fit: BoxFit.cover,
                   )),
                 ),
