@@ -9,7 +9,7 @@ class CustomDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(50),
         child: Text(
           text,
           style: const TextStyle(fontSize: 17),

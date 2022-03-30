@@ -148,6 +148,7 @@ class HttpService {
   }
 
   increaseQuestions(int id, int bought, String token) async {
+    print("llamado");
     var uri = Uri.parse("$url$api/increaseQuestions/$id/");
     var response = await http.patch(
       uri,
