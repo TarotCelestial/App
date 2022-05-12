@@ -31,6 +31,7 @@ class Constants {
     "Argentina",
     "República Dominicana",
     "Panamá",
-    "México"
+    "México",
+    "Otro",
   ];
 }

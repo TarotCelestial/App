@@ -7,6 +7,8 @@ import 'package:tarotcelestial/assets/custom-colors.dart';
 import 'package:tarotcelestial/providers/user_provider.dart';
 import 'package:tarotcelestial/repos/http_repo.dart';
 import 'package:tarotcelestial/widgets/custom_dialog.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class CargarController extends GetxController {
   bool bought = false;
@@ -39,7 +41,6 @@ class CargarController extends GetxController {
         purchaseUpdated.listen((List<PurchaseDetails> purchaseDetailsList) {
       _listenToPurchaseUpdated(purchaseDetailsList, userProvider);
     }, onDone: () {
-      print("terminado");
       _subscription!.cancel();
     }, onError: (error) {
       // handle error here.
@@ -87,13 +88,14 @@ class CargarController extends GetxController {
     bought = true;
     Get.dialog(
       Dialog(
-        child: Container(
-          height: 60,
-          width: 60,
-          padding: const EdgeInsets.all(40),
-          child: const CircularProgressIndicator(color: CustomColors.hardPrincipal,),
-        )
-      ),
+          child: Container(
+        height: 60,
+        width: 60,
+        padding: const EdgeInsets.all(40),
+        child: const CircularProgressIndicator(
+          color: CustomColors.hardPrincipal,
+        ),
+      )),
     );
     var url = await HttpRepo().increaseQuestions(
         userProvider.getUser!.person!.id!,
@@ -113,5 +115,17 @@ class CargarController extends GetxController {
       content: const Text("Ya puedes usar tus deseos"),
     );
     bought = false;
+  }
+  //////////////////////////////////////////////////////////////////////////////////////////
+
+  initWeb(userProvider) async {
+    loading = false;
+    update();
+    return;
+  }
+  Future StripeCreatePaymentMetod() async{
+  }
+  Future StripeProcessPayment() async{
+
   }
 }

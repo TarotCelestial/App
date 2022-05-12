@@ -16,7 +16,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../data/constants/constants.dart';
 import '../../data/models/zodiac_sign_model.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../service/http_service.dart';
 
 class AuthController extends GetxController {
@@ -33,17 +33,17 @@ class AuthController extends GetxController {
   }
 
   login(String email, String password, UserProvider userProvider) async {
+    final token = await FirebaseMessaging.instance.getToken();
     Get.dialog(
-      const Center(
-        child: CircularProgressIndicator(
-          color: CustomColors.hardPrincipal,
+        const Center(
+          child: CircularProgressIndicator(
+            color: CustomColors.hardPrincipal,
+          ),
         ),
-      ),
-      barrierDismissible: false
-    );
-    Map body = {"email": email, "password": password};
+        barrierDismissible: false);
+    Map body = {"email": email, "token": token ,"password": password};
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -74,8 +74,10 @@ class AuthController extends GetxController {
     Get.back();
     if (userProvider.getUser?.personType == 1) {
       Get.offAllNamed('/home-page');
-    } else {
+    } else if (userProvider.getUser?.personType == 2) {
       Get.offAllNamed('/tarotist-home-page');
+    } else {
+      Get.offAllNamed('/admin-home-page');
     }
   }
 
@@ -88,7 +90,6 @@ class AuthController extends GetxController {
     dropCountryIndex = country;
     update();
   }
-
   register(
       String email,
       String phone,
@@ -98,6 +99,7 @@ class AuthController extends GetxController {
       String firstNames,
       String lastNames,
       UserProvider userProvider) async {
+    final token = await FirebaseMessaging.instance.getToken();
     if (psw1 != psw2) {
       Get.dialog(
         CustomDialog("Las contraseñas no coinciden"),
@@ -108,6 +110,7 @@ class AuthController extends GetxController {
         child: CircularProgressIndicator(
       color: CustomColors.hardPrincipal,
     )));
+
     Map body = {
       "email": email,
       "username": email,
@@ -115,6 +118,7 @@ class AuthController extends GetxController {
           signs.indexWhere((element) => element.name == dropSignIndex!.name),
       "pais": dropCountryIndex,
       "phone_number": phone,
+      "token": token,
       "password": psw1,
       "password_confirmation": psw2,
       "referal_code": referalCode,
@@ -175,7 +179,7 @@ class AuthController extends GetxController {
         userProvider.getUser!.accessToken!);
     if (url == null) {
       Get.dialog(
-        CustomDialog("Ah sucedido un error"),
+        CustomDialog("Ha sucedido un error"),
       );
       return;
     }
@@ -190,8 +194,7 @@ class AuthController extends GetxController {
             color: CustomColors.hardPrincipal,
           ),
         ),
-        barrierDismissible: false
-    );
+        barrierDismissible: false);
     var response = await HttpRepo().changeOnlineStatus(
         userProvider.getUser!.person!.user!.id!,
         userProvider.getUser!.accessToken!);

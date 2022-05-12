@@ -53,8 +53,8 @@ android {
         applicationId "com.tarot_celestial.tarotcelestial"
         minSdkVersion localProperties.getProperty('flutter.minSdkVersion').toInteger()
         targetSdkVersion localProperties.getProperty('flutter.targetSdkVersion').toInteger()
-        versionCode 3
-        versionName "0.2"
+        versionCode 7
+        versionName "0.9.2"
     }
 
     signingConfigs {

@@ -14,6 +14,7 @@ import 'package:tarotcelestial/controllers/sections/chats_controller.dart';
 import 'package:tarotcelestial/repos/personalized_firebase_chat_core_repo.dart';
 
 import '../../providers/user_provider.dart';
+import '../../widgets/custom_dialog.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({
@@ -29,6 +30,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final chatController = Get.put(ChatController());
+  late int? id;
   void _handleMessageTap(BuildContext context, types.Message message) async {
     if (message is types.FileMessage) {
       var localPath = message.uri;
@@ -60,18 +62,29 @@ class _ChatPageState extends State<ChatPage> {
         .updateMessage(updatedMessage, widget.room.id);
   }
 
-  void _handleSendPressed(types.PartialText message) async{
-    if(await chatController.decreace()){
+  void _handleSendPressed(types.PartialText message) async {
+    if (chatController.tarotist) {
       PersonalizedFirebaseChatCoreRepo.instance.sendMessage(
         message,
         widget.room.id,
       );
+      return;
+    }
+    if (await chatController.haveQuestions(id!)) {
+      PersonalizedFirebaseChatCoreRepo.instance.sendMessage(
+        message,
+        widget.room.id,
+      );
+    }else{
+      Get.dialog(CustomDialog("No te quedan preguntas"));
+      chatController.update();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
+    id = userProvider.getUser!.person!.id ?? 0;
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -131,19 +144,26 @@ class _ChatPageState extends State<ChatPage> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
-                                      const Text("Parece que no te quedan mas preguntas",style: TextStyle(
-                                        fontSize: 18,
-                                          color: Colors.white),),
+                                      const Text(
+                                        "Parece que no te quedan mas preguntas",
+                                        style: TextStyle(
+                                            fontSize: 18, color: Colors.white),
+                                      ),
                                       GestureDetector(
-                                        onTap: (){
-                                          Get.find<HomeController>().changeSection(4);
+                                        onTap: () {
+                                          Get.find<HomeController>()
+                                              .changeSection(4);
                                           Get.back();
                                         },
-                                        child: const Text("Recarga y no te quedes con la duda",style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                            decoration: TextDecoration.underline,
-                                            color: Colors.white),),
+                                        child: const Text(
+                                          "Recarga y no te quedes con la duda",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color: Colors.white),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -151,28 +171,83 @@ class _ChatPageState extends State<ChatPage> {
                               ),
                             )
                           : const SizedBox.shrink(),
-                      userProvider.getUser!.personType==1? Align(
+                      Align(
                         alignment: Alignment.topRight,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: CustomColors.hardPrincipal.withOpacity(0.8),
-                            border: Border.all(
-                                color: CustomColors.hardPrincipal, width: 2),
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(10.0),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Preguntas restantes: " + _.preguntas.toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ):const SizedBox.shrink()
+                        child: userProvider.getUser!.personType == 1
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  color: CustomColors.hardPrincipal
+                                      .withOpacity(0.8),
+                                  border: Border.all(
+                                      color: CustomColors.hardPrincipal,
+                                      width: 2),
+                                  borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(10.0),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Preguntas restantes: " +
+                                        _.preguntas.toString(),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(Colors.red),
+                                  ),
+                                  onPressed: () {
+                                    Get.defaultDialog(
+                                        title: "¿Estas seguro?",
+                                        content: const Text(
+                                            "Se desconará un token de la cuenta del cliente"),
+                                        actions: [
+                                          ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      CustomColors
+                                                          .hardPrincipal),
+                                            ),
+                                            child: const Text("Aceptar"),
+                                            onPressed: () {
+                                              Get.back();
+                                              _.decreace(widget.room.users
+                                                  .where((element) =>
+                                                      element
+                                                          .metadata?['email'] !=
+                                                      userProvider.getUser!
+                                                          .person!.user!.email)
+                                                  .first
+                                                  .metadata?['email']);
+                                            },
+                                          ),
+                                          ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.red),
+                                            ),
+                                            child: const Text("Cancelar"),
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                          ),
+                                        ]);
+                                  },
+                                  child: Container(
+                                    child: const Text("Token usado"),
+                                  ),
+                                ),
+                              ),
+                      ),
                     ],
                   );
                 },

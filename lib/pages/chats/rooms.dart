@@ -2,13 +2,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
+import 'package:tarotcelestial/providers/user_provider.dart';
 import '../../assets/util.dart';
+import '../../controllers/sections/rooms_controller.dart';
 import '../../repos/personalized_firebase_chat_core_repo.dart';
+import 'admin/admin_chat.dart';
 import 'chat.dart';
 
 class RoomsPage extends StatefulWidget {
-  const RoomsPage({Key? key}) : super(key: key);
+  String? id;
+  RoomsPage({this.id});
 
   @override
   _RoomsPageState createState() => _RoomsPageState();
@@ -18,6 +23,7 @@ class _RoomsPageState extends State<RoomsPage> {
   bool _error = false;
   bool _initialized = false;
   User? _user;
+  final RoomsController _roomsController = Get.put(RoomsController());
 
   @override
   void initState() {
@@ -82,6 +88,8 @@ class _RoomsPageState extends State<RoomsPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.id);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     if (_error) {
       return Container();
     }
@@ -91,9 +99,12 @@ class _RoomsPageState extends State<RoomsPage> {
     }
 
     return StreamBuilder<List<types.Room>>(
-      stream: PersonalizedFirebaseChatCoreRepo.instance.rooms(),
+      stream: widget.id == null
+          ? PersonalizedFirebaseChatCoreRepo.instance.rooms()
+          : PersonalizedFirebaseChatCoreRepo.instance.roomsUid(uid: widget.id!),
       initialData: const [],
       builder: (context, snapshot) {
+        print(snapshot.data);
         if (!snapshot.hasData) {
           return Container(
             alignment: Alignment.center,
@@ -117,36 +128,79 @@ class _RoomsPageState extends State<RoomsPage> {
             ),
           );
         }
-        return ListView.builder(
-          itemCount: snapshot.data!.length,
-          itemBuilder: (context, index) {
-            final room = snapshot.data![index];
-
-            return InkWell(
-              onTap: () {
-                Get.to(()=>ChatPage(
-                  room: room,
-                ));
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Row(
-                  children: [
-                    _buildAvatar(room),
-                    Text(
-                      room.name ?? '',
-                      style: TextStyle(fontSize: 18),
+        return GetBuilder<RoomsController>(
+            init: _roomsController,
+            initState: (_) => _roomsController.init(snapshot.data!),
+            builder: (_) {
+              if (_.loading) {
+                return Container(
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(
+                    color: CustomColors.hardPrincipal,
+                  ),
+                );
+              }
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  print(snapshot.data![index]);
+                  print(index);
+                  final room = snapshot.data![index];
+                  si(room);
+                  return InkWell(
+                    onTap: () {
+                      if (widget.id == null) {
+                        Get.to(() => ChatPage(
+                              room: room,
+                            ));
+                      } else {
+                        Get.to(() => AdminChatPage(
+                              room: room,
+                              uid: widget.id!,
+                            ));
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildAvatar(room),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                room.name ?? '',
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              const SizedBox(height: 3), Text(
+                                      _.messages[index].text,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: _.messages[index].author
+                                                      .metadata!["email"].contains("tarotcelestial")
+                                              ? Colors.black54
+                                              : Colors.red),
+                                    )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+                  );
+                },
+              );
+            });
       },
     );
+  }
+
+  si(types.Room room) async {
+    types.TextMessage message = await PersonalizedFirebaseChatCoreRepo.instance
+        .getLastMessage(room) as types.TextMessage;
   }
 }

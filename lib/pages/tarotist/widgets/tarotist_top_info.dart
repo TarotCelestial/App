@@ -126,20 +126,24 @@ class TarotistTopInfo extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(90),
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: controller.tarotistas[index]["user"]
-                                  ["imagen"] !=
-                              ""
-                          ? controller.tarotistas[index]["user"]["imagen"]
-                          : "https://firebasestorage.googleapis.com/v0/b/tarotcelestialapp.appspot.com/o/tarotistas%2Fdefault.jpg?alt=media&token=45842cca-d351-402f-beb9-2ff2caf597b2",
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) => Center(
-                              child: CircularProgressIndicator(
-                                  color: CustomColors.hardPrincipal,
-                                  value: downloadProgress.progress)),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                    child: Container(
+                        height: 100,
+                        width: 100,
+                      child: CachedNetworkImage(
+                        fit: BoxFit.fitWidth,
+                        imageUrl: controller.tarotistas[index]["user"]
+                                    ["imagen"] !=
+                                ""
+                            ? controller.tarotistas[index]["user"]["imagen"]
+                            : "https://firebasestorage.googleapis.com/v0/b/tarotcelestialapp.appspot.com/o/tarotistas%2Fdefault.jpg?alt=media&token=45842cca-d351-402f-beb9-2ff2caf597b2",
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    color: CustomColors.hardPrincipal,
+                                    value: downloadProgress.progress)),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
                     ),
                   ),
                   Align(

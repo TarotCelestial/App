@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:tarotcelestial/controllers/home/home_controller.dart';
 import 'package:tarotcelestial/pages/home/widgets/custom_bottom_bar.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:tarotcelestial/pages/sections/cargar_web_page.dart';
 import '../../assets/custom-colors.dart';
-import '../../providers/user_provider.dart';
 import '../sections/articulos_page.dart';
 import '../sections/tarotistas_page.dart';
 import '../sections/cargar_page.dart';
@@ -29,6 +28,13 @@ class _HomePageState extends State<HomePage> {
     const HoroscopoPage(),
     CargarPage(),
   ];
+  List webpages = [
+    TarotistasPage(),
+    ArticulosPage(),
+    const ChatsPage(),
+    const HoroscopoPage(),
+    CargarWebPage()
+  ];
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
@@ -40,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               title: Text(_.sections[_.index]),
             ),
             drawer: const CustomDrawer(),
-            body: pages[_.index],
+            body: kIsWeb?webpages[_.index]:pages[_.index],
             bottomNavigationBar: const CustomBottomBar(),
           );
         });

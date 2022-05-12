@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:tarotcelestial/assets/custom-colors.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../controllers/home/home_controller.dart';
 import '../../controllers/sections/cargar_controller.dart';
 import '../../providers/user_provider.dart';
@@ -34,23 +34,36 @@ class CargarPage extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            ElevatedButton(
-              style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(1),
-                  backgroundColor: MaterialStateProperty.all(
-                      CustomColors.hardPrincipal)),
-              onPressed: () {
-                Get.toNamed("/login-page");
-              },
-              child: SizedBox(
-                height: 40,
-                child: Center(
-                  child: Text(
+            Center(
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(1),
+                    backgroundColor: MaterialStateProperty.all(
+                        CustomColors.hardPrincipal)),
+                onPressed: () {
+                  Get.toNamed("/login-page");
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: kIsWeb
+                      ? Text(
                     "Iniciar sesión",
                     style: TextStyle(
                         color: CustomColors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
+                  )
+                      : SizedBox(
+                    width: double.infinity,
+                    child: Center(
+                      child: Text(
+                        "Iniciar sesión",
+                        style: TextStyle(
+                            color: CustomColors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ),
               ),

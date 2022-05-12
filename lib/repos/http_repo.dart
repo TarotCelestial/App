@@ -27,13 +27,21 @@ class HttpRepo {
     return jsonDecode(utf8.decode(data));
   }
 
+  getFullTarotistas() async {
+    var data = await HttpService().getFullTarotistas();
+    if (data == null) {
+      return null;
+    }
+    return jsonDecode(utf8.decode(data));
+  }
+
   getHoroscope() async {
     var data = await HttpService().getHoroscope();
     if (data == null) {
       return {};
     }
 
-    return jsonDecode(data);
+    return jsonDecode(utf8.decode(data));
   }
   createChat(Map body, int userId, String token) async {
     var data = await HttpService().createChat(body, userId, token);
@@ -60,8 +68,8 @@ class HttpRepo {
     return jsonDecode(data);
   }
 
-  decreaseQuestions(int id, String token) async{
-    var data = await HttpService().decreaseQuestions(id, token);
+  decreaseQuestions(String clientEmail, String token) async{
+    var data = await HttpService().decreaseQuestions(clientEmail, token);
     if (data == null) {
       return;
     }

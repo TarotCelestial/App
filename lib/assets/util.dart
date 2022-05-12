@@ -19,5 +19,10 @@ Color getUserAvatarNameColor(types.User user) {
   return colors[index];
 }
 
+Color getUserAvatarNameColorId(int id) {
+  final index = id % colors.length;
+  return colors[index];
+}
+
 String getUserName(types.User user) =>
     '${user.firstName ?? ''} ${user.lastName ?? ''}'.trim();

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -5,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:hive/hive.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tarotcelestial/data/models/hive_models/user_data.dart';
@@ -14,15 +14,30 @@ import 'package:tarotcelestial/pages/home/tarotist-home-page.dart';
 import 'package:tarotcelestial/pages/login/login_page.dart';
 import 'package:tarotcelestial/providers/user_provider.dart';
 import 'firebase_options.dart';
+import 'pages/home/admin-home-page.dart';
 import 'pages/home/home_page.dart';
 import 'pages/login/register_page.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if(kIsWeb){
+    Stripe.publishableKey = "pk_test_51JaCR8BZH9IUwfrAmLYf4kqjD2RF1nOgAaynwUWyuEs5RQ9d2PXlq9ZJwAY9pLqcxDPpaqvCCfSR0h1skGoRL24l00oMxCjV7R";
+    Stripe.merchantIdentifier = 'test';
+    Stripe.urlScheme = 'flutterstripe';
+    await Stripe.instance.applySettings();
+  }
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await dotenv.load(fileName: ".env");
+  NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    badge: true,
+    provisional: false,
+    sound: true,
+  );
+  await dotenv.load(fileName: "dotenv");
   await Hive.initFlutter();
   Hive.registerAdapter(UserDataAdapter());
   await Hive.openBox<UserData>('UserData');
@@ -52,10 +67,14 @@ class MyApp extends StatelessWidget {
       try {
         userProviderReader
             .setUser(PersonalData.fromJson(box.getAt(0)!.personalData));
-        if(userProviderReader.getUser?.personType==2){
+        if(box.getAt(0)!.personalData["personType"]==2){
           initialRoute='/tarotist-home-page';
         }
-      } catch (_) {}
+        if(box.getAt(0)!.personalData["personType"]==0){
+          initialRoute='/admin-home-page';
+        }
+      } catch (_) {
+      }
     }
     //Gestion de sesión
     return GetMaterialApp(
@@ -74,6 +93,10 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: '/tarotist-home-page',
             page: () => const TarotistHomePage(),
+            transition: Transition.downToUp),
+        GetPage(
+            name: '/admin-home-page',
+            page: () => const AdminHomePage(),
             transition: Transition.downToUp),
         GetPage(
             name: '/login-page',

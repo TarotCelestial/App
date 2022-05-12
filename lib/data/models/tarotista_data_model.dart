@@ -23,7 +23,7 @@ class Tarotista {
     if (json['especialidades'] != null) {
       especialidades = <Especialidades>[];
       json['especialidades'].forEach((v) {
-        especialidades!.add(new Especialidades.fromJson(v));
+        especialidades!.add(Especialidades.fromJson(v));
       });
     }
   }

@@ -37,7 +37,7 @@ class HttpService {
   }
 
   getTarotistas() async {
-    var uri = Uri.parse("$url$api/listTarotistas");
+    var uri = Uri.parse("$url$api/tarotistas");
     var response = await http.get(uri, headers: <String, String>{
       'Content-Type': 'application/json; charset=utf-8',
     });
@@ -47,15 +47,26 @@ class HttpService {
     return response.bodyBytes;
   }
 
+  getFullTarotistas() async {
+    var uri = Uri.parse("$url$api/tarotistas/listfull/");
+    var response = await http.post(uri, headers: <String, String>{
+      'Content-Type': 'application/json; charset=utf-8',
+    });
+    if (response.statusCode != 200) {
+      return;
+    }
+    return response.bodyBytes;
+  }
+
   getHoroscope() async {
-    var uri = Uri.parse("https://horoscopefree.herokuapp.com/daily/es/");
+    var uri = Uri.parse("https://tarot-celestial.herokuapp.com/api/v1/horoscope/");
     var response = await http.get(uri, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
     if (response.statusCode != 200) {
       return;
     }
-    return response.body;
+    return response.bodyBytes;
   }
 
   createChat(Map body, int userId, String token) async {
@@ -132,23 +143,20 @@ class HttpService {
     return response.body;
   }
 
-  decreaseQuestions(int id, String token) async {
-    var uri = Uri.parse("$url$api/decreaseQuestions/$id/");
-    var response = await http.patch(
+  decreaseQuestions(String clientEmail, String token) async {
+    var uri = Uri.parse("$url$api/decreaseQuestions/");
+    var response = await http.post(
       uri,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': "Token $token"
+        'Authorization': "Token $token",
       },
+        body: jsonEncode({"email": clientEmail})
     );
-    if (response.statusCode != 200) {
-      return;
-    }
     return response.statusCode;
   }
 
   increaseQuestions(int id, int bought, String token) async {
-    print("llamado");
     var uri = Uri.parse("$url$api/increaseQuestions/$id/");
     var response = await http.patch(
       uri,

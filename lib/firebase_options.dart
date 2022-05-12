@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     // ignore: missing_enum_constant_in_switch
     switch (defaultTargetPlatform) {
@@ -39,6 +36,16 @@ class DefaultFirebaseOptions {
       'DefaultFirebaseOptions are not supported for this platform.',
     );
   }
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyA9Qh7lq35pCb8AVXTC3wOVb5QfZzBZ5lA',
+    appId: '1:817995314374:web:c1c2343744a0d6ee1d53c7',
+    messagingSenderId: '817995314374',
+    projectId: 'tarotcelestialapp',
+    authDomain: 'tarotcelestialapp.firebaseapp.com',
+    storageBucket: 'tarotcelestialapp.appspot.com',
+    measurementId: 'G-6KJ94Z87YT',
+  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCx_cFWxhsbF9TwgBW8cYpdJhQuFDB0t1Y',
