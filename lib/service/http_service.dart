@@ -186,4 +186,24 @@ class HttpService {
     }
     return jsonDecode(response.body)["status"];
   }
+
+  sendNotification(String token, String name, String message) async {
+    var uri = Uri.parse("https://fcm.googleapis.com/fcm/send");
+    var response = await http.post(
+        uri,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': "key=AAAAvnRR9MY:APA91bGYrYR0ozHI64m5xFhXl-xZGQPohGbeu08x1-5jcNBa4qYe6pIjYK9Xw0W-pAEjBFv1nX6yvHSjllrIdkMgZQid9fy72J5CANv-OCNeDvP85a5gOA4m7j7s1ZIKTMHwSusW7DA6",
+        },
+        body: jsonEncode({
+          "to": token,
+          "notification":{
+            "body": message,
+            "title":"Nuevo mensaje de $name"
+          }
+
+        })
+    );
+    return response.statusCode;
+  }
 }

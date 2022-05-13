@@ -91,4 +91,12 @@ class HttpRepo {
     }
     return data;
   }
+
+  sendNotification(String token, String name, String message) async{
+    var data = await HttpService().sendNotification(token, name, message);
+    if (data == null) {
+      return;
+    }
+    return data;
+  }
 }

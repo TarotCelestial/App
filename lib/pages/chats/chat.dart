@@ -68,6 +68,7 @@ class _ChatPageState extends State<ChatPage> {
         message,
         widget.room.id,
       );
+
       return;
     }
     if (await chatController.haveQuestions(id!)) {

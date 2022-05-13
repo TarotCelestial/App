@@ -60,4 +60,8 @@ class ChatController extends GetxController {
     }
     return true;
   }
+
+  SendNotification(String token)async{
+
+  }
 }
